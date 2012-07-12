@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings 
+  xmlns="http://java.sun.com/xml/ns/persistence/orm" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd" version="1.0">
+
+  <package>org.storytotell.tpet.entity</package>
+  
+  <entity class="Course">
+    <table name="courses"/>
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY"/>
+      </id>
+      <basic name="name"/>
+    </attributes>
+  </entity>
+</entity-mappings>

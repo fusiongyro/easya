@@ -28,4 +28,7 @@ public class CourseManager {
     return entityManager.find(Course.class, id);
   }
   
+  public void save(Course course) {
+    entityManager.persist(course);
+  }
 }

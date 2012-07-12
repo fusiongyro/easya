@@ -1,0 +1,10 @@
+h1 { font-family: 'Simonetta', cursive; font-size: 48pt; }
+
+body {
+  margin: 0 auto;
+  width: 48em;
+  text-rendering: optimizeLegibility;
+  -moz-font-smoothing:antialiased;
+  -webkit-font-smoothing:antialiased;
+  font-smoothing:antialiased;
+}

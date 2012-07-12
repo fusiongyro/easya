@@ -1,9 +1,11 @@
+package org.storytotell.tpet.ui;
+
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.New;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.storytotell.ejb.CourseManager;
+import org.storytotell.tpet.ejb.CourseManager;
 import org.storytotell.tpet.entity.Course;
 
 /**

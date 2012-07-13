@@ -25,6 +25,8 @@
 package org.storytotell.tpet.entity;
 
 import java.io.Serializable;
+import javax.validation.constraints.NotNull;
+import org.storytotell.tpet.validations.annotations.ShortCode;
 
 /**
  * @author Daniel Lyons <fusion@storytotell.org>
@@ -32,8 +34,10 @@ import java.io.Serializable;
 public class Course implements Serializable {
   private static final long serialVersionUID = 1L;
   private Long id;
-  private String name;
-  private String description;
+  
+  private @NotNull   String name;
+  private            String description;
+  private @ShortCode String shortCode;
 
   public Long getId() {
     return id;
@@ -45,9 +49,11 @@ public class Course implements Serializable {
 
   public String getName()        { return name; }
   public String getDescription() { return description; }
+  public String getShortCode()   { return shortCode; }
   
   public void setName(String name)               { this.name = name; }
   public void setDescription(String description) { this.description = description; }
+  public void setShortCode(String shortCode)     { this.shortCode = shortCode; }
 
   @Override
   public int hashCode() {

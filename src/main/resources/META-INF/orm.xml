@@ -14,6 +14,7 @@
       </id>
       <basic name="name"><column nullable="false" unique="true"/></basic>
       <basic name="description"/>
+      <basic name="shortCode"><column name="short_code" nullable="false" unique="true"/></basic>
     </attributes>
   </entity>
 </entity-mappings>

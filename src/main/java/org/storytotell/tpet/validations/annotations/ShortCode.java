@@ -22,45 +22,32 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.ejb;
+package org.storytotell.tpet.validations.annotations;
 
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.storytotell.tpet.entity.Course;
+import static java.lang.annotation.ElementType.*;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import javax.validation.Constraint;
+import javax.validation.Payload;
+import javax.validation.ReportAsSingleViolation;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
+ *
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Stateless
-@LocalBean
-@Named("courseManager")
-public class CourseManager {
-  private static final Logger log = Logger.getLogger(CourseManager.class.getName());
-  @PersistenceContext private EntityManager entityManager;
-  
-  public Course findById(long id) {
-    return entityManager.find(Course.class, id);
-  }
-  
-  public void save(Course course) {
-    entityManager.persist(course);
-  }
-  
-  public Course findByShortCode(String shortCode) {
-    log.log(Level.INFO, "Loading course by short code: {0}", shortCode);
-    return entityManager
-            .createQuery("SELECT c FROM Course c WHERE c.shortCode = :shortCode", Course.class)
-            .setParameter("shortCode", shortCode)
-            .getSingleResult();
-  }
-  
-  public List<Course> getFrontPageCourses() {
-    return entityManager.createQuery("SELECT c FROM Course c", Course.class).getResultList();
-  }
+@Target({METHOD, FIELD, ANNOTATION_TYPE})
+@Retention(RUNTIME)
+@NotNull(message="must not be empty")
+@Size(min=3, max=12)
+@Pattern(regexp="[A-Za-z0-9-]*", message="{org.storytotell.tpet.constraints.shortCode}")
+@Constraint(validatedBy={})
+@ReportAsSingleViolation
+public @interface ShortCode {
+  String message() default "{org.storytotell.tpet.constraints.shortCode}";
+  Class<?>[] groups() default {};
+  Class<? extends Payload>[] payload() default {};
 }

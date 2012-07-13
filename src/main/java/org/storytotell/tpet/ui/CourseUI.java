@@ -24,6 +24,9 @@
  */
 package org.storytotell.tpet.ui;
 
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
@@ -36,9 +39,17 @@ import org.storytotell.tpet.entity.Course;
 @Named("courseUI")
 @RequestScoped
 public class CourseUI {
+  private static final Logger log = Logger.getLogger(CourseUI.class.getName());
+  
   @EJB private CourseManager courseManager;
   
+  private Course course;
+  private String shortCode;
   private Course newCourse = new Course();
+
+  public Course getCourse() {
+    return course;
+  }
   
   public Course getNewCourse() {
     return newCourse;
@@ -46,5 +57,22 @@ public class CourseUI {
   
   public void saveNew() {
     courseManager.save(newCourse);
+  }
+
+  public String getShortCode() { return shortCode; }
+  public void setShortCode(String shortCode) 
+  {
+    log.log(Level.INFO, "assigning short code: {0}", shortCode);
+    this.shortCode = shortCode; 
+  }
+
+  public void loadFromShortCode() {
+    log.info("loading short code");
+    if (shortCode != null)
+      course = courseManager.findByShortCode(shortCode);
+  }
+  
+  public void doSomething() {
+    log.log(Level.INFO, "doing something, also our shortCode is {0}", shortCode);
   }
 }

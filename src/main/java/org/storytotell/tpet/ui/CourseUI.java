@@ -55,8 +55,10 @@ public class CourseUI {
     return newCourse;
   }
   
-  public void saveNew() {
+  public String saveNew() {
     courseManager.save(newCourse);
+    shortCode = newCourse.getShortCode();
+    return "pretty:course";
   }
 
   public String getShortCode() { return shortCode; }

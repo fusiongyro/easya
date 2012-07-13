@@ -28,12 +28,16 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   xmlns="http://www.w3.org/1999/xhtml"
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:tpet="http://java.sun.com/jsf/composite/components/tpet"
   template="template.xhtml">
   <h1>Teacher's Pet</h1>
   <p>Hello from Teacher's Pet!</p>
 
-  <p>First course name: #{courseManager.frontPageCourses}</p>
-  <p>First course name: #{courseManager.findByShortCode('CS-113')}</p>
+  <ol>
+    <ui:repeat value="#{courseManager.frontPageCourses}" var="course">
+      <li><tpet:course-link course="#{course}"/></li>
+    </ui:repeat>
+  </ol>
 
   <h:panelGrid columns="3">
     <h:outputLabel for="name" value="Name:"/>

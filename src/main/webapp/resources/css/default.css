@@ -3,6 +3,7 @@ h1 { font-size: 48pt; }
 h2 { font-size: 36pt; }
 
 body {
+  font: 'Pontano Sans', sans-serif;
   margin: 0 auto;
   width: 48em;
   text-rendering: optimizeLegibility;

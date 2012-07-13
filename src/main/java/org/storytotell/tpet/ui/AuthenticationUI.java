@@ -43,7 +43,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * Managed bean to handle login and logout.
+ * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @RequestScoped
@@ -67,6 +68,9 @@ public class AuthenticationUI implements Serializable {
     return SecurityUtils.getSubject();
   }
 
+  /**
+   * Attempt to log in with the currently-defined properties.
+   */
   public void authenticate() {
     try {
       getCurrentUser().login(getAuthenticationToken());
@@ -75,12 +79,21 @@ public class AuthenticationUI implements Serializable {
     }
   }
   
+  /**
+   * Attempt to log in with these credentials
+   * 
+   * @param username  the username
+   * @param password  the password
+   */
   public void login(String username, String password) {
     setUsername(username);
     setPassword(password);
     authenticate();
   }
   
+  /**
+   * Close the current session for the currently logged-in user.
+   */
   public void logout() {
     getCurrentUser().logout();
   }
@@ -91,6 +104,9 @@ public class AuthenticationUI implements Serializable {
   public void setUsername(String username) { this.username = username; }
   public void setPassword(String password) { this.password = password; }
 
+  /**
+   * Produce the authentication token needed by Apache Shiro.
+   */
   private AuthenticationToken getAuthenticationToken() {
     return new UsernamePasswordToken(username, password);
   }

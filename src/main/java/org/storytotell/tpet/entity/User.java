@@ -28,6 +28,8 @@ import java.io.Serializable;
 
 
 /**
+ * A user of this application.
+ * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 public class User implements Serializable {

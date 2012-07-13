@@ -37,6 +37,8 @@ import org.storytotell.tpet.entity.Course;
 import org.storytotell.tpet.events.CourseCreated;
 
 /**
+ * Finds specific courses and courses relevent to certain uses and contexts.
+ * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @Stateless
@@ -51,23 +53,37 @@ public class CourseManager {
   public Course findById(long id) {
     return entityManager.find(Course.class, id);
   }
-  
+
+  /**
+   * Save a brand new course to the database.
+   */
   public void save(Course course) {
     entityManager.persist(course);
     courseCreatedEvent.fire(new CourseCreated(course));
   }
-  
+
+  /**
+   * Persist changes to this course to the database.
+   */
   public void update(Course course) { 
     entityManager.merge(course);
   }
-  
+
+  /**
+   * Locate a course by the short code (e.g.: CS-113).
+   */
   public Course findByShortCode(String shortCode) {
     return entityManager
             .createQuery("SELECT c FROM Course c WHERE c.shortCode = :shortCode", Course.class)
             .setParameter("shortCode", shortCode)
             .getSingleResult();
   }
-  
+
+  /**
+   * Get a list of interesting courses for the purpose of display on the front 
+   * page. The definition of this is intentionally left vague for future 
+   * refinement.
+   */
   public List<Course> getFrontPageCourses() {
     return entityManager.createQuery("SELECT c FROM Course c", Course.class).getResultList();
   }

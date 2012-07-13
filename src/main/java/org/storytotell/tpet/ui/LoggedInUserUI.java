@@ -36,6 +36,9 @@ import org.storytotell.tpet.ejb.AccountManager;
 import org.storytotell.tpet.entity.User;
 
 /**
+ * Represent the currently logged-in user. In contrast to the user whose page
+ * we may or may not be looking at.
+ * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @RequestScoped

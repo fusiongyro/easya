@@ -36,7 +36,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
- *
+ * Validates the necessary requirements of a short code, which essentially are
+ * that it looks good in a URL.
+ * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @Target({METHOD, FIELD, ANNOTATION_TYPE})

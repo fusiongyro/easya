@@ -29,6 +29,9 @@ import javax.validation.constraints.NotNull;
 import org.storytotell.tpet.validations.annotations.ShortCode;
 
 /**
+ * Represents a particular class on a particular topic taught by a particular
+ * teacher and happening over a particular range of time.
+ * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 public class Course implements Serializable {

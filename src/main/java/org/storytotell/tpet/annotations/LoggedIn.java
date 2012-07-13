@@ -30,6 +30,8 @@ import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * The annotated User shall be the currently logged-in User.
+ * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @Target({FIELD, METHOD, ANNOTATION_TYPE})

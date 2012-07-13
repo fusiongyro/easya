@@ -35,6 +35,8 @@ import org.storytotell.tpet.entity.User;
 import org.storytotell.tpet.events.AccountRegistered;
 
 /**
+ * Handles User lookup and registration.
+ * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @Stateless

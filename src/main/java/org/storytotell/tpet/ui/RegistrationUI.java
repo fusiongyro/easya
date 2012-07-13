@@ -34,6 +34,8 @@ import org.storytotell.tpet.ejb.AccountManager;
 import org.storytotell.tpet.entity.User;
 
 /**
+ * Handle the form and process of registering a new account.
+ * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @RequestScoped

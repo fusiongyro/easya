@@ -22,40 +22,16 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.ui;
+package org.storytotell.tpet.annotations;
 
-import java.io.Serializable;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-import javax.inject.Named;
-import org.storytotell.tpet.ejb.AccountManager;
-import org.storytotell.tpet.entity.User;
+import java.lang.annotation.Target;
+import static java.lang.annotation.ElementType.*;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@RequestScoped
-@Named("userUI")
-public class UserUI implements Serializable {
-  private User currentUser;
-  private String username;
-  
-  private @Inject AccountManager accountManager;
-  
-  public @Produces User   getCurrentUser() { return currentUser; }
-  public           String getUsername()    { return username; }
-  
-  public void setCurrentUser(User currentUser) { this.currentUser = currentUser; }
-  public void setUsername(String username)     { this.username = username; }
-  
-  public void lookupUser() {
-    currentUser = accountManager.findByUsername(username);
-  }
-
-  void setCurrentUserByUsername(String username)
-  {
-    setUsername(username);
-    lookupUser();
-  }
-}
+@Target({FIELD, METHOD, ANNOTATION_TYPE})
+@Retention(RUNTIME)
+public @interface LoggedIn {}

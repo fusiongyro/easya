@@ -26,11 +26,9 @@ package org.storytotell.tpet.ui;
 
 import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Event;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import org.apache.shiro.SecurityUtils;
@@ -43,7 +41,6 @@ import org.apache.shiro.web.env.IniWebEnvironment;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.storytotell.tpet.events.Login;
 
 /**
  *
@@ -57,10 +54,6 @@ public class AuthenticationUI implements Serializable {
   private static final Logger log = LoggerFactory.getLogger(AuthenticationUI.class);
   private String username, password;
 
-  private @Inject Event<Login> loginEvent;
-  private @Inject Subject currentUser;
-  private @Inject UserUI userUI;
-  
   public @Produces IniWebEnvironment getWebEnvironment() {
     ServletContext ctx = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
     return (IniWebEnvironment)WebUtils.getRequiredWebEnvironment(ctx);
@@ -76,9 +69,7 @@ public class AuthenticationUI implements Serializable {
 
   public void authenticate() {
     try {
-      currentUser.login(getAuthenticationToken());
-      userUI.setCurrentUserByUsername(username);
-      loginEvent.fire(new Login(userUI.getCurrentUser()));
+      getCurrentUser().login(getAuthenticationToken());
     } catch (Exception e) {
       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Login failed."));
     }
@@ -91,7 +82,7 @@ public class AuthenticationUI implements Serializable {
   }
   
   public void logout() {
-    currentUser.logout();
+    getCurrentUser().logout();
   }
   
   public String getUsername() { return username; }
@@ -101,7 +92,6 @@ public class AuthenticationUI implements Serializable {
   public void setPassword(String password) { this.password = password; }
 
   private AuthenticationToken getAuthenticationToken() {
-    log.info("AuthenticationToken({}, {})", username, password);
     return new UsernamePasswordToken(username, password);
   }
 }

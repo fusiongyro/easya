@@ -12,7 +12,8 @@
       <id name="id">
         <generated-value strategy="IDENTITY"/>
       </id>
-      <basic name="name"/>
+      <basic name="name"><column nullable="false" unique="true"/></basic>
+      <basic name="description"/>
     </attributes>
   </entity>
 </entity-mappings>

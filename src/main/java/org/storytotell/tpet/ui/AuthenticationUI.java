@@ -26,6 +26,8 @@ package org.storytotell.tpet.ui;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -54,7 +56,7 @@ public class AuthenticationUI {
     try {
       currentUser.login(getAuthenticationToken());
     } catch (Exception e) {
-      log.info("Login exception", e);
+      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Login failed."));
     }
   }
   

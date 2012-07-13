@@ -27,6 +27,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:tpet="http://java.sun.com/jsf/composite/components/tpet"
       xmlns:shiro="http://shiro.apache.org/tags">
   <h:head>
     <title>Teacher's Pet - <ui:insert name="title">Home</ui:insert></title>
@@ -36,8 +37,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </h:head>
   <h:body>
     <h:form>
-      <shiro:guest>Welcome, Guest!</shiro:guest>
-      <shiro:authenticated>Welcome, <shiro:principal/>!</shiro:authenticated>
+      <tpet:welcome-link/>
       <ui:insert/>
     </h:form>
   </h:body>

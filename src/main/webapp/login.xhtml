@@ -24,21 +24,29 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:shiro="http://shiro.apache.org/tags">
-  <h:head>
-    <title>Teacher's Pet - <ui:insert name="title">Home</ui:insert></title>
-    <link href='http://fonts.googleapis.com/css?family=Simonetta' rel='stylesheet' type='text/css'/>
-    <link href='http://fonts.googleapis.com/css?family=Pontano+Sans' rel='stylesheet' type='text/css'/>
-    <h:outputStylesheet library="css" name="default.css"/>
-  </h:head>
-  <h:body>
-    <h:form>
-      <shiro:guest>Welcome, Guest!</shiro:guest>
-      <shiro:authenticated>Welcome, <shiro:principal/>!</shiro:authenticated>
-      <ui:insert/>
-    </h:form>
-  </h:body>
-</html>
+<ui:composition
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:tpet="http://java.sun.com/jsf/composite/components/tpet"
+  template="template.xhtml"
+  xmlns:shiro="http://shiro.apache.org/tags">
+  <h1>Teacher's Pet</h1>
+  
+  <shiro:guest>
+    <h:panelGrid columns="2">
+      <h:outputLabel for="username" value="Username:"/>
+      <h:inputText id="username" value="#{authenticationUI.username}"/>
+
+      <h:outputLabel for="password" value="Password:"/>
+      <h:inputSecret id="password" value="#{authenticationUI.password}"/>
+
+      <ui:fragment>&nbsp;</ui:fragment>
+      <h:commandButton value="Login" action="#{authenticationUI.authenticate}"/>
+    </h:panelGrid>
+  </shiro:guest>
+  
+  <shiro:authenticated>
+    Welcome back, <shiro:principal/>! Care to <h:commandButton value="Logout" action="#{authenticationUI.logout}"/>
+  </shiro:authenticated>
+</ui:composition>

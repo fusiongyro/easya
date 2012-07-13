@@ -22,35 +22,23 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.ejb;
+package org.storytotell.tpet.events;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import org.storytotell.tpet.entity.User;
-import org.storytotell.tpet.events.AccountRegistered;
 
 /**
+ * Broadcast when someone logs in.
+ * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Stateless
-@LocalBean
-@Named("AccountManager")
-public class AccountManager {
-  private @PersistenceContext EntityManager em;
+public class Login {
+  private User user;
 
-  private @Inject Event<AccountRegistered> accountRegistered;
-
-  public User findByUsername(String username) {
-    return em.find(User.class, username);
+  public Login(User user) {
+    this.user = user;
   }
-  
-  public void register(User user) {
-    em.persist(user);
-    accountRegistered.fire(new AccountRegistered(user));
+
+  public User getUser() {
+    return user;
   }
 }

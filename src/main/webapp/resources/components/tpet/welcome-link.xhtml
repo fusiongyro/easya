@@ -42,7 +42,8 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         Welcome, guest! <h:link outcome="pretty:login" value="Login"/>
       </shiro:guest>
       <shiro:authenticated>
-        Welcome back, <shiro:principal/>! <h:commandLink value="Logout" action="#{authenticationUI.logout}"/>
+        Welcome back, <h:outputText value="#{userUI.username}"/>! 
+        <h:commandLink value="Logout" action="#{authenticationUI.logout}"/>
       </shiro:authenticated>
     </cc:implementation>
   </body>

@@ -22,35 +22,40 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.ejb;
+package org.storytotell.tpet.ui;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
+import java.io.Serializable;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import org.storytotell.tpet.ejb.AccountManager;
 import org.storytotell.tpet.entity.User;
-import org.storytotell.tpet.events.AccountRegistered;
 
 /**
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Stateless
-@LocalBean
-@Named("AccountManager")
-public class AccountManager {
-  private @PersistenceContext EntityManager em;
-
-  private @Inject Event<AccountRegistered> accountRegistered;
-
-  public User findByUsername(String username) {
-    return em.find(User.class, username);
-  }
+@RequestScoped
+@Named("userUI")
+public class UserUI implements Serializable {
+  private User currentUser;
+  private String username;
   
-  public void register(User user) {
-    em.persist(user);
-    accountRegistered.fire(new AccountRegistered(user));
+  private @Inject AccountManager accountManager;
+  
+  public @Produces User   getCurrentUser() { return currentUser; }
+  public           String getUsername()    { return username; }
+  
+  public void setCurrentUser(User currentUser) { this.currentUser = currentUser; }
+  public void setUsername(String username)     { this.username = username; }
+  
+  public void lookupUser() {
+    currentUser = accountManager.findByUsername(username);
+  }
+
+  void setCurrentUserByUsername(String username)
+  {
+    setUsername(username);
+    lookupUser();
   }
 }

@@ -24,51 +24,23 @@
  */
 package org.storytotell.tpet.ejb;
 
-import java.util.List;
-import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.storytotell.tpet.entity.Course;
-import org.storytotell.tpet.events.CourseCreated;
+import org.storytotell.tpet.entity.User;
 
 /**
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @Stateless
 @LocalBean
-@Named("CourseManager")
-public class CourseManager {
-  private static final Logger log = Logger.getLogger(CourseManager.class.getName());
-  @PersistenceContext private EntityManager entityManager;
-  
-  private @Inject Event<CourseCreated> courseCreatedEvent;
-  
-  public Course findById(long id) {
-    return entityManager.find(Course.class, id);
-  }
-  
-  public void save(Course course) {
-    entityManager.persist(course);
-    courseCreatedEvent.fire(new CourseCreated(course));
-  }
-  
-  public void update(Course course) { 
-    entityManager.merge(course);
-  }
-  
-  public Course findByShortCode(String shortCode) {
-    return entityManager
-            .createQuery("SELECT c FROM Course c WHERE c.shortCode = :shortCode", Course.class)
-            .setParameter("shortCode", shortCode)
-            .getSingleResult();
-  }
-  
-  public List<Course> getFrontPageCourses() {
-    return entityManager.createQuery("SELECT c FROM Course c", Course.class).getResultList();
+@Named("AccountManager")
+public class AccountManager {
+  private @PersistenceContext EntityManager em;
+
+  public void register(User user) {
+    em.persist(user);
   }
 }

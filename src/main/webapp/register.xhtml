@@ -34,6 +34,8 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   xmlns:f="http://java.sun.com/jsf/core">
   <h2>Register</h2>
 
+  <shiro:authenticated><p>Hey, <shiro:principal/>, I already know who you are!</p></shiro:authenticated>
+  
   <fieldset>
     <legend>Register</legend>
     <h:panelGrid columns="3">

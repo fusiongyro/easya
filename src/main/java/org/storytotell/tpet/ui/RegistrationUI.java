@@ -24,16 +24,23 @@
  */
 package org.storytotell.tpet.ui;
 
+import java.io.Serializable;
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import org.apache.shiro.authc.credential.PasswordService;
+import org.storytotell.tpet.ejb.AccountManager;
+import org.storytotell.tpet.entity.User;
 
 /**
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @RequestScoped
 @Named("registrationUI")
-public class RegistrationUI 
-{
+public class RegistrationUI implements Serializable {
+  private static final long serialVersionUID = 1L;
+  
   private String username, email, password, passwordConfirmation, accountType;
 
   public String getUsername()             { return username; }
@@ -48,8 +55,26 @@ public class RegistrationUI
   public void setPasswordConfirmation(String confirmation) { this.passwordConfirmation = confirmation; }
   public void setAccountType(String accountType)           { this.accountType = accountType; }
   
-  public String register()
-  {
+  private @Inject AuthenticationUI authenticationUI;
+  private @Inject PasswordService  passwordService;
+  private @Inject AccountManager accountManager;
+  
+  public String register() {
+    User user = new User();
+
+    String encryptedPassword = passwordService.encryptPassword(password);
+
+    user.setUsername(username);
+    user.setPassword(encryptedPassword);
+    user.setEmailAddress(email);
+    
+    accountManager.register(user);
+    
+    login();
     return ""; // return "pretty:user"
+  }
+
+  private void login() {
+    authenticationUI.login(username, password);
   }
 }

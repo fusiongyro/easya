@@ -24,15 +24,23 @@
  */
 package org.storytotell.tpet.ui;
 
+import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.ServletContext;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.credential.HashingPasswordService;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.env.IniWebEnvironment;
+import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,17 +50,28 @@ import org.slf4j.LoggerFactory;
  */
 @RequestScoped
 @Named("authenticationUI")
-public class AuthenticationUI {
+public class AuthenticationUI implements Serializable {
+  private static final long serialVersionUID = 1L;
+  
   private static final Logger log = LoggerFactory.getLogger(AuthenticationUI.class);
   private String username, password;
 
+  private @Inject Subject currentUser;
+  
+  public @Produces IniWebEnvironment getWebEnvironment() {
+    ServletContext ctx = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
+    return (IniWebEnvironment)WebUtils.getRequiredWebEnvironment(ctx);
+  }
+  
+  public @Produces PasswordService getPasswordService() {
+    return getWebEnvironment().getObject("passwordService", HashingPasswordService.class);
+  }
+  
   public @Produces Subject getCurrentUser() { 
     return SecurityUtils.getSubject();
   }
-  
+
   public void authenticate() {
-    Subject currentUser = getCurrentUser();
-    
     try {
       currentUser.login(getAuthenticationToken());
     } catch (Exception e) {
@@ -60,8 +79,14 @@ public class AuthenticationUI {
     }
   }
   
+  public void login(String username, String password) {
+    setUsername(username);
+    setPassword(password);
+    authenticate();
+  }
+  
   public void logout() {
-    getCurrentUser().logout();
+    currentUser.logout();
   }
   
   public String getUsername() { return username; }

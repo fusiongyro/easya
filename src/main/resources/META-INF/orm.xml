@@ -17,4 +17,13 @@
       <basic name="shortCode"><column name="short_code" nullable="false" unique="true"/></basic>
     </attributes>
   </entity>
+  
+  <entity class="User">
+    <table name="users"/>
+    <attributes>
+      <id name="username"/>
+      <basic name="password"/>
+      <basic name="emailAddress"><column name="email" nullable="false" unique="true"/></basic>
+    </attributes>
+  </entity>
 </entity-mappings>

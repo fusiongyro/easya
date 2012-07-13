@@ -25,14 +25,16 @@
 package org.storytotell.tpet.ejb;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.storytotell.tpet.entity.Course;
+import org.storytotell.tpet.events.CourseCreated;
 
 /**
  * @author Daniel Lyons <fusion@storytotell.org>
@@ -44,12 +46,19 @@ public class CourseManager {
   private static final Logger log = Logger.getLogger(CourseManager.class.getName());
   @PersistenceContext private EntityManager entityManager;
   
+  @Inject Event<CourseCreated> courseCreatedEvent;
+  
   public Course findById(long id) {
     return entityManager.find(Course.class, id);
   }
   
   public void save(Course course) {
     entityManager.persist(course);
+    courseCreatedEvent.fire(new CourseCreated(course));
+  }
+  
+  public void update(Course course) { 
+    entityManager.merge(course);
   }
   
   public Course findByShortCode(String shortCode) {

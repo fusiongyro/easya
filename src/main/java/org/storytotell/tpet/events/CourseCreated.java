@@ -22,62 +22,23 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.ui;
+package org.storytotell.tpet.events;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
-import javax.inject.Named;
-import org.storytotell.tpet.ejb.CourseManager;
 import org.storytotell.tpet.entity.Course;
-import org.storytotell.tpet.events.CourseCreated;
 
 /**
+ * Broadcast when a new course is created.
+ * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Named("courseUI")
-@RequestScoped
-public class CourseUI {
-  private static final Logger log = Logger.getLogger(CourseUI.class.getName());
-  
-  @EJB private CourseManager courseManager;
-  
-  private Course course;
-  private String shortCode;
-  private Course newCourse = new Course();
+public class CourseCreated {
+  private Course newCourse;
 
-  public Course getCourse() {
-    return course;
+  public CourseCreated(Course newCourse) {
+    this.newCourse = newCourse;
   }
-  
+
   public Course getNewCourse() {
     return newCourse;
-  }
-  
-  public String saveNew() {
-    courseManager.save(newCourse);
-    shortCode = newCourse.getShortCode();
-    return "pretty:course";
-  }
-  
-  public void save() { courseManager.update(course); }
-
-  public String getShortCode() { return shortCode; }
-  public void setShortCode(String shortCode) 
-  {
-    this.shortCode = shortCode; 
-  }
-  
-  public void setName(String name) { course.setName(name); }
-  
-  public void logCourseCreated(@Observes CourseCreated created) {
-    log.log(Level.INFO, "just saw a course get created with name {0}", created.getNewCourse().getName());
-  }
-
-  public void loadFromShortCode() {
-    if (shortCode != null)
-      course = courseManager.findByShortCode(shortCode);
   }
 }

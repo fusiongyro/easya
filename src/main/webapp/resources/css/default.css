@@ -1,4 +1,6 @@
-h1 { font-family: 'Simonetta', cursive; font-size: 48pt; }
+h1, h2, h3, h4, h5, h6 { font-family: 'Simonetta', cursive; }
+h1 { font-size: 48pt; }
+h2 { font-size: 36pt; }
 
 body {
   margin: 0 auto;

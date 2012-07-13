@@ -29,7 +29,6 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   xmlns:ui="http://java.sun.com/jsf/facelets"
   template="template.xhtml"
   xmlns:f="http://java.sun.com/jsf/core">
-  <p>We're looking at #{courseUI.course.name}</p>
-  
-  <p><h:commandButton action="#{courseUI.doSomething}"/></p>
+  <ui:define name="title">#{courseUI.course.name}</ui:define>
+  <h2>#{courseUI.course.name}</h2>
 </ui:composition>

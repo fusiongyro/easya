@@ -53,7 +53,6 @@ public class CourseManager {
   }
   
   public Course findByShortCode(String shortCode) {
-    log.log(Level.INFO, "Loading course by short code: {0}", shortCode);
     return entityManager
             .createQuery("SELECT c FROM Course c WHERE c.shortCode = :shortCode", Course.class)
             .setParameter("shortCode", shortCode)

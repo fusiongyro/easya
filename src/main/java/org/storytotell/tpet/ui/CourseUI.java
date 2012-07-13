@@ -62,17 +62,11 @@ public class CourseUI {
   public String getShortCode() { return shortCode; }
   public void setShortCode(String shortCode) 
   {
-    log.log(Level.INFO, "assigning short code: {0}", shortCode);
     this.shortCode = shortCode; 
   }
 
   public void loadFromShortCode() {
-    log.info("loading short code");
     if (shortCode != null)
       course = courseManager.findByShortCode(shortCode);
-  }
-  
-  public void doSomething() {
-    log.log(Level.INFO, "doing something, also our shortCode is {0}", shortCode);
   }
 }

@@ -30,19 +30,40 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   xmlns:ui="http://java.sun.com/jsf/facelets"
   xmlns:tpet="http://java.sun.com/jsf/composite/components/tpet"
   template="template.xhtml"
-  xmlns:shiro="http://shiro.apache.org/tags">
-  <h1>Teacher's Pet</h1>
+  xmlns:shiro="http://shiro.apache.org/tags"
+  xmlns:f="http://java.sun.com/jsf/core">
+  <h2>Register</h2>
 
-  <h:panelGrid columns="2">
-    <h:outputLabel for="username" value="Username:"/>
-    <h:inputText id="username" value="#{authenticationUI.username}"/>
+  <fieldset>
+    <legend>Register</legend>
+    <h:panelGrid columns="3">
+      <h:outputLabel for="username" value="Username:"/>
+      <h:inputText id="username" value="#{registrationUI.username}"/>
+      <h:message for="username"/>
 
-    <h:outputLabel for="password" value="Password:"/>
-    <h:inputSecret id="password" value="#{authenticationUI.password}"/>
+      <h:outputLabel for="email" value="Email:"/>
+      <h:inputText id="email" value="#{registrationUI.email}"/>
+      <h:message for="email"/>
 
-    <ui:fragment>&nbsp;</ui:fragment>
-    <h:commandButton value="Login" action="#{authenticationUI.authenticate}"/>
-  </h:panelGrid>
-  
-  <h:messages/>
+      <h:outputLabel for="password" value="Password:"/>
+      <h:inputSecret id="password" value="#{registrationUI.password}"/>
+      <h:message for="password"/>
+
+      <h:outputLabel for="passwordConfirmation" value="Password (confirm):"/>
+      <h:inputSecret id="passwordConfirmation" value="#{registrationUI.passwordConfirmation}"/>
+      <h:message for="passwordConfirmation"/>
+
+      <h:outputLabel for="accountType" value="Account Type:"/>
+      <h:selectOneRadio value="#{registrationUI.accountType}">
+        <f:selectItem itemLabel="Student" itemValue="student"/>
+        <f:selectItem itemLabel="Teacher" itemValue="teacher"/>
+        <f:selectItem itemLabel="Grader"  itemValue="grader"/>
+      </h:selectOneRadio>
+      <h:message for="accountType"/>
+
+      <h:panelGroup/>
+      <h:commandButton value="Register" action="#{registrationUI.register}"/>
+      <h:messages/>
+    </h:panelGrid>
+  </fieldset>
 </ui:composition>

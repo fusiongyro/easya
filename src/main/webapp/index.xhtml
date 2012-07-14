@@ -29,7 +29,8 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:ui="http://java.sun.com/jsf/facelets"
   xmlns:links="http://java.sun.com/jsf/composite/components/links"
-  template="template.xhtml">
+  xmlns:forms="http://java.sun.com/jsf/composite/components/forms"
+  template="resources/templates/template.xhtml">
   <h1>Easy A</h1>
   <p>Hello from Easy A!</p>
 
@@ -39,20 +40,10 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     </ui:repeat>
   </ol>
 
-  <h:panelGrid columns="3">
-    <h:outputLabel for="name" value="Name:"/>
-    <h:inputText id="name" value="#{courseUI.newCourse.name}"/>
-    <h:message for="name"/>
-
-    <h:outputLabel for="shortCode" value="Short Code:"/>
-    <h:inputText id="shortCode" value="#{courseUI.newCourse.shortCode}"/>
-    <h:message for="shortCode"/>
-
-    <h:outputLabel for="description" value="Description:"/>
-    <h:inputTextarea id="description" rows="6" cols="40" value="#{courseUI.newCourse.description}"/>
-    <h:message for="description"/>
-
-    <h:outputLabel value=""/>
-    <h:commandButton action="#{courseUI.saveNew}" value="Save"/>
-  </h:panelGrid>
+  <forms:form label="Create Course">
+    <forms:field label="Name"><h:inputText id="name" value="#{courseUI.newCourse.name}"/></forms:field>
+    <forms:field label="Short Code"><h:inputText id="shortCode" value="#{courseUI.newCourse.shortCode}"/></forms:field>
+    <forms:field label="Description"><h:inputTextarea id="description" rows="6" cols="40" value="#{courseUI.newCourse.description}"/></forms:field>
+    <forms:field label=""><h:commandButton action="#{courseUI.saveNew}" value="Save"/></forms:field>
+  </forms:form>
 </ui:composition>

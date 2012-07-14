@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Copyright (c) 2012, Daniel Lyons
 All rights reserved.
@@ -23,28 +23,25 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISI
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:ui="http://java.sun.com/jsf/facelets"
-  xmlns:links="http://java.sun.com/jsf/composite/components/links"
-  template="resources/templates/template.xhtml"
-  xmlns:shiro="http://shiro.apache.org/tags">
-  <h1>Easy A</h1>
-
-  <shiro:authenticated><p>Hey, <shiro:principal/>, I already know who you are!</p></shiro:authenticated>
-
-  <h:panelGrid columns="2">
-    <h:outputLabel for="username" value="Username:"/>
-    <h:inputText id="username" value="#{authenticationUI.username}"/>
-
-    <h:outputLabel for="password" value="Password:"/>
-    <h:inputSecret id="password" value="#{authenticationUI.password}"/>
-
-    <ui:fragment>&nbsp;</ui:fragment>
-    <h:commandButton value="Login" action="#{authenticationUI.authenticate}"/>
-  </h:panelGrid>
-  
-  <h:messages/>
-</ui:composition>
+<!DOCTYPE html>
+<html 
+  xmlns="http://www.w3.org/1999/xhtml" 
+  xmlns:cc="http://java.sun.com/jsf/composite" 
+  xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets">
+  <head>
+    <title>TODO supply a title</title>
+  </head>
+  <body>
+    <cc:interface>
+      <cc:attribute name="label" class="java.lang.String"/>
+    </cc:interface>
+    <cc:implementation>
+      <fieldset>
+        <ui:fragment rendered="#{not empty cc.attrs.label}">
+          <legend>#{cc.attrs.label}</legend>
+        </ui:fragment>
+        <cc:insertChildren/>
+      </fieldset>
+    </cc:implementation>
+  </body>
+</html>

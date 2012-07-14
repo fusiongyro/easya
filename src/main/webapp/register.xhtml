@@ -29,43 +29,26 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:ui="http://java.sun.com/jsf/facelets"
   xmlns:links="http://java.sun.com/jsf/composite/components/links"
-  template="template.xhtml"
+  xmlns:forms="http://java.sun.com/jsf/composite/components/forms"
+  template="resources/templates/template.xhtml"
   xmlns:shiro="http://shiro.apache.org/tags"
   xmlns:f="http://java.sun.com/jsf/core">
   <h2>Register</h2>
 
   <shiro:authenticated><p>Hey, <shiro:principal/>, I already know who you are!</p></shiro:authenticated>
   
-  <fieldset>
-    <legend>Register</legend>
-    <h:panelGrid columns="3">
-      <h:outputLabel for="username" value="Username:"/>
-      <h:inputText id="username" value="#{registrationUI.username}"/>
-      <h:message for="username"/>
-
-      <h:outputLabel for="email" value="Email:"/>
-      <h:inputText id="email" value="#{registrationUI.email}"/>
-      <h:message for="email"/>
-
-      <h:outputLabel for="password" value="Password:"/>
-      <h:inputSecret id="password" value="#{registrationUI.password}"/>
-      <h:message for="password"/>
-
-      <h:outputLabel for="passwordConfirmation" value="Password (confirm):"/>
-      <h:inputSecret id="passwordConfirmation" value="#{registrationUI.passwordConfirmation}"/>
-      <h:message for="passwordConfirmation"/>
-
-      <h:outputLabel for="accountType" value="Account Type:"/>
+  <forms:form label="Register">
+    <forms:field label="Username:"><h:inputText id="username" value="#{registrationUI.username}"/></forms:field>
+    <forms:field label="Email"><h:inputText id="email" value="#{registrationUI.email}"/></forms:field>
+    <forms:field label="Password"><h:inputSecret id="password" value="#{registrationUI.password}"/></forms:field>
+    <forms:field label="Password (confirmation)"><h:inputSecret id="passwordConfirmation" value="#{registrationUI.passwordConfirmation}"/></forms:field>
+    <forms:field label="Account Type">
       <h:selectOneRadio value="#{registrationUI.accountType}">
         <f:selectItem itemLabel="Student" itemValue="student"/>
         <f:selectItem itemLabel="Teacher" itemValue="teacher"/>
         <f:selectItem itemLabel="Grader"  itemValue="grader"/>
       </h:selectOneRadio>
-      <h:message for="accountType"/>
-
-      <h:panelGroup/>
-      <h:commandButton value="Register" action="#{registrationUI.register}"/>
-      <h:messages/>
-    </h:panelGrid>
-  </fieldset>
+    </forms:field>
+    <forms:field label=""><h:commandButton value="Register" action="#{registrationUI.register}"/></forms:field>
+  </forms:form>
 </ui:composition>

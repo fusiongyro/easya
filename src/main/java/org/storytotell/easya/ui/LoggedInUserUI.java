@@ -22,23 +22,36 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.events;
+package org.storytotell.easya.ui;
 
-import org.storytotell.tpet.entity.Course;
+import java.io.Serializable;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
+import javax.inject.Named;
+import org.apache.shiro.subject.Subject;
+import org.storytotell.easya.annotations.LoggedIn;
+import org.storytotell.easya.ejb.AccountManager;
+import org.storytotell.easya.entity.User;
 
 /**
- * Broadcast when a new course is created.
+ * Represent the currently logged-in user. In contrast to the user whose page
+ * we may or may not be looking at.
  * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-public class CourseCreated {
-  private Course newCourse;
-
-  public CourseCreated(Course newCourse) {
-    this.newCourse = newCourse;
+@RequestScoped
+@Named("loggedInUserUI")
+public class LoggedInUserUI implements Serializable {
+  private @Produces @LoggedIn User currentUser;
+  private @Inject AccountManager accountManager;
+  private @Inject Subject currentSubject;
+  
+  @PostConstruct
+  public void lookupUser() {
+    currentUser = accountManager.findByUsername(currentSubject.getPrincipal().toString());
   }
 
-  public Course getNewCourse() {
-    return newCourse;
-  }
+  public User getCurrentUser() { return currentUser; }
 }

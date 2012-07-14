@@ -22,23 +22,23 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.events;
+package org.storytotell.easya.events;
 
-import org.storytotell.tpet.entity.User;
+import org.storytotell.easya.entity.Course;
 
 /**
- * Broadcast when a new account is registered.
+ * Broadcast when a new course is created.
  * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-public class AccountRegistered {
-  private User newUser;
+public class CourseCreated {
+  private Course newCourse;
 
-  public AccountRegistered(User newUser) {
-    this.newUser = newUser;
+  public CourseCreated(Course newCourse) {
+    this.newCourse = newCourse;
   }
 
-  public User getNewUser() {
-    return newUser;
+  public Course getNewCourse() {
+    return newCourse;
   }
 }

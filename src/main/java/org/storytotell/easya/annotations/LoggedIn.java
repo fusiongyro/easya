@@ -22,7 +22,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.annotations;
+package org.storytotell.easya.annotations;
 
 import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;

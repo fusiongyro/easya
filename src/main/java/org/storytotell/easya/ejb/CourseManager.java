@@ -22,7 +22,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.ejb;
+package org.storytotell.easya.ejb;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -33,8 +33,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.storytotell.tpet.entity.Course;
-import org.storytotell.tpet.events.CourseCreated;
+import org.storytotell.easya.entity.Course;
+import org.storytotell.easya.events.CourseCreated;
 
 /**
  * Finds specific courses and courses relevent to certain uses and contexts.

@@ -22,7 +22,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.ui;
+package org.storytotell.easya.ui;
 
 import java.io.Serializable;
 import javax.ejb.EJB;
@@ -30,8 +30,8 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.shiro.authc.credential.PasswordService;
-import org.storytotell.tpet.ejb.AccountManager;
-import org.storytotell.tpet.entity.User;
+import org.storytotell.easya.ejb.AccountManager;
+import org.storytotell.easya.entity.User;
 
 /**
  * Handle the form and process of registering a new account.

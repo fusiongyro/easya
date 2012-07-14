@@ -22,7 +22,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.validations.annotations;
+package org.storytotell.easya.validations.annotations;
 
 import static java.lang.annotation.ElementType.*;
 import java.lang.annotation.Retention;
@@ -45,11 +45,11 @@ import javax.validation.constraints.Size;
 @Retention(RUNTIME)
 @NotNull(message="must not be empty")
 @Size(min=3, max=12)
-@Pattern(regexp="[A-Za-z0-9-]*", message="{org.storytotell.tpet.constraints.shortCode}")
+@Pattern(regexp="[A-Za-z0-9-]*", message="{org.storytotell.easya.constraints.shortCode}")
 @Constraint(validatedBy={})
 @ReportAsSingleViolation
 public @interface ShortCode {
-  String message() default "{org.storytotell.tpet.constraints.shortCode}";
+  String message() default "{org.storytotell.easya.constraints.shortCode}";
   Class<?>[] groups() default {};
   Class<? extends Payload>[] payload() default {};
 }

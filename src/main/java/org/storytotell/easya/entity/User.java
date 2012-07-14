@@ -22,57 +22,31 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.entity;
+package org.storytotell.easya.entity;
 
 import java.io.Serializable;
-import javax.validation.constraints.NotNull;
-import org.storytotell.tpet.validations.annotations.ShortCode;
+
 
 /**
- * Represents a particular class on a particular topic taught by a particular
- * teacher and happening over a particular range of time.
+ * A user of this application.
  * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-public class Course implements Serializable {
+public class User implements Serializable {
   private static final long serialVersionUID = 1L;
-  private Long id;
   
-  private @NotNull   String name;
-  private            String description;
-  private @ShortCode String shortCode;
+  private String username, password, emailAddress;
 
-  public Long   getId()          { return id; }
-  public String getName()        { return name; }
-  public String getDescription() { return description; }
-  public String getShortCode()   { return shortCode; }
-  
-  public void setId(Long id)                     { this.id = id; }
-  public void setName(String name)               { this.name = name; }
-  public void setDescription(String description) { this.description = description; }
-  public void setShortCode(String shortCode)     { this.shortCode = shortCode; }
+  public String getUsername() { return username; }
+  public String getPassword() { return password; }
+  public String getEmailAddress() { return emailAddress; }
 
-  @Override
-  public int hashCode() {
-    int hash = 0;
-    hash += (id != null ? id.hashCode() : 0);
-    return hash;
-  }
-
-  @Override
-  public boolean equals(Object object) {
-    if (!(object instanceof Course)) {
-      return false;
-    }
-    Course other = (Course) object;
-    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-      return false;
-    }
-    return true;
-  }
+  public void setUsername(String username) { this.username = username; }
+  public void setPassword(String password) { this.password = password; }
+  public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress; }
 
   @Override
   public String toString() {
-    return "org.storytotell.tpet.entity.Course[ id=" + id + " ]";
+    return "org.storytotell.easya.entity.User[" + username + "]";
   }
 }

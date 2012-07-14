@@ -22,62 +22,37 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.ui;
+package org.storytotell.easya.ejb;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import javax.inject.Named;
-import org.storytotell.tpet.ejb.CourseManager;
-import org.storytotell.tpet.entity.Course;
-import org.storytotell.tpet.events.CourseCreated;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.storytotell.easya.entity.User;
+import org.storytotell.easya.events.AccountRegistered;
 
 /**
+ * Handles User lookup and registration.
+ * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Named("courseUI")
-@RequestScoped
-public class CourseUI {
-  private static final Logger log = Logger.getLogger(CourseUI.class.getName());
-  
-  @EJB private CourseManager courseManager;
-  
-  private Course course;
-  private String shortCode;
-  private Course newCourse = new Course();
+@Stateless
+@LocalBean
+@Named("AccountManager")
+public class AccountManager {
+  private @PersistenceContext EntityManager em;
 
-  public Course getCourse() {
-    return course;
-  }
-  
-  public Course getNewCourse() {
-    return newCourse;
-  }
-  
-  public String saveNew() {
-    courseManager.save(newCourse);
-    shortCode = newCourse.getShortCode();
-    return "pretty:course";
-  }
-  
-  public void save() { courseManager.update(course); }
+  private @Inject Event<AccountRegistered> accountRegistered;
 
-  public String getShortCode() { return shortCode; }
-  public void setShortCode(String shortCode) 
-  {
-    this.shortCode = shortCode; 
+  public User findByUsername(String username) {
+    return em.find(User.class, username);
   }
   
-  public void setName(String name) { course.setName(name); }
-  
-  public void logCourseCreated(@Observes CourseCreated created) {
-    log.log(Level.INFO, "just saw a course get created with name {0}", created.getNewCourse().getName());
-  }
-
-  public void loadFromShortCode() {
-    if (shortCode != null)
-      course = courseManager.findByShortCode(shortCode);
+  public void register(User user) {
+    em.persist(user);
+    accountRegistered.fire(new AccountRegistered(user));
   }
 }

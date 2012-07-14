@@ -22,9 +22,9 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.tpet.events;
+package org.storytotell.easya.events;
 
-import org.storytotell.tpet.entity.User;
+import org.storytotell.easya.entity.User;
 
 /**
  * Broadcast when someone logs in.

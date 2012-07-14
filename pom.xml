@@ -4,11 +4,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.storytotell</groupId>
-  <artifactId>tpet</artifactId>
+  <artifactId>easy-a</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
-  <name>Teacher's Pet v${project.version}</name>
+  <name>Easy A v${project.version}</name>
 
   <properties>
     <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -85,11 +85,11 @@
         <artifactId>liquibase-maven-plugin</artifactId>
         <version>2.0.5</version>
         <configuration>
-          <changeLogFile>src/main/resources/org/storytotell/tpet/liquibase/install.xml</changeLogFile>
+          <changeLogFile>src/main/resources/org/storytotell/easya/liquibase/install.xml</changeLogFile>
           <driver>org.postgresql.Driver</driver>
-          <url>jdbc:postgresql://localhost/tpet</url>
-          <username>tpet</username>
-          <password>tpet</password>
+          <url>jdbc:postgresql://localhost/easya</url>
+          <username>easya</username>
+          <password>easya</password>
         </configuration>
       </plugin>
 
@@ -168,10 +168,6 @@
       <releases>
         <enabled>false</enabled>
       </releases>
-    </repository>
-    <repository>
-      <id>scala-tools</id>
-      <url>http://scala-tools.org/repo-releases</url>
     </repository>
   </repositories>
 </project>

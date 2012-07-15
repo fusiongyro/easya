@@ -51,6 +51,11 @@ public class AccountManager {
     return em.find(User.class, username);
   }
   
+  public boolean isUsernameTaken(String username) {
+    long count = (Long)em.createQuery("SELECT COUNT(u) FROM User u WHERE u.username = :username").setParameter("username", username).getSingleResult();
+    return count == 1;
+  }
+  
   public void register(User user) {
     em.persist(user);
     accountRegistered.fire(new AccountRegistered(user));

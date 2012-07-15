@@ -15,3 +15,7 @@ body {
 .formField .ui-message-error {
   margin: 4pt 0 12pt 0;
 }
+
+.formField {
+  margin-bottom: 12pt;
+}

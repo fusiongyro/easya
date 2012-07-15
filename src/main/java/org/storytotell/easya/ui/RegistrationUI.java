@@ -25,8 +25,11 @@
 package org.storytotell.easya.ui;
 
 import java.io.Serializable;
-import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.shiro.authc.credential.PasswordService;
@@ -43,7 +46,8 @@ import org.storytotell.easya.entity.User;
 public class RegistrationUI implements Serializable {
   private static final long serialVersionUID = 1L;
   
-  private String username, email, password, passwordConfirmation, accountType;
+  private String username;
+  private String email, password, passwordConfirmation, accountType;
 
   public String getUsername()             { return username; }
   public String getEmail()                { return email; }
@@ -76,6 +80,12 @@ public class RegistrationUI implements Serializable {
     return ""; // return "pretty:user"
   }
 
+  public void validateUsername(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+    if (accountManager.isUsernameTaken((String) value))
+      throw new ValidatorException(
+              new FacesMessage(FacesMessage.SEVERITY_ERROR, "This username is already taken.", "'" + value + "' is taken"));
+  }
+  
   private void login() {
     authenticationUI.login(username, password);
   }

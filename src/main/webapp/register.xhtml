@@ -25,30 +25,52 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition
+  template="resources/templates/template.xhtml"
   xmlns="http://www.w3.org/1999/xhtml"
   xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
   xmlns:ui="http://java.sun.com/jsf/facelets"
-  xmlns:links="http://java.sun.com/jsf/composite/components/links"
-  xmlns:forms="http://java.sun.com/jsf/composite/components/forms"
-  template="resources/templates/template.xhtml"
-  xmlns:shiro="http://shiro.apache.org/tags"
-  xmlns:f="http://java.sun.com/jsf/core">
-  <h2>Register</h2>
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:links="http://java.sun.com/jsf/composite/components/links">
+  <p:fieldset legend="Register">
+    <div class="formField">
+      <p:outputLabel value="Username:" for="username"/><br/>
+      <p:inputText id="username" value="#{registrationUI.username}"/><br/>
+      <p:message for="username"/>
+    </div>
+    
+    <div class="formField">
+      <p:outputLabel value="Email" for="email"/><br/>
+      <p:inputText id="email" value="#{registrationUI.email}"/><br/>
+      <p:message for="email"/>
+    </div>
+    
+    <div>
+      <p:outputLabel value="Password" for="password"/><br/>
+      <p:password id="password" value="#{registrationUI.password}" match="passwordConfirmation"/><br/>
+      <p:message for="password"/>
+    </div>
+    
+    <div>
+      <p:outputLabel value="Password (confirmation)" for="passwordConfirmation"/><br/>
+      <p:password id="passwordConfirmation" value="#{registrationUI.passwordConfirmation}"/><br/>
+      <p:message for="passwordConfirmation"/>
+    </div>
 
-  <shiro:authenticated><p>Hey, <shiro:principal/>, I already know who you are!</p></shiro:authenticated>
-  
-  <forms:form label="Register">
-    <forms:field label="Username:"><h:inputText id="username" value="#{registrationUI.username}"/></forms:field>
-    <forms:field label="Email"><h:inputText id="email" value="#{registrationUI.email}"/></forms:field>
-    <forms:field label="Password"><h:inputSecret id="password" value="#{registrationUI.password}"/></forms:field>
-    <forms:field label="Password (confirmation)"><h:inputSecret id="passwordConfirmation" value="#{registrationUI.passwordConfirmation}"/></forms:field>
-    <forms:field label="Account Type">
-      <h:selectOneRadio value="#{registrationUI.accountType}">
+    <div>
+      <p:outputLabel value="Account Type" for="accountType"/>
+      <p:selectOneRadio id="accountType" value="#{registrationUI.accountType}">
         <f:selectItem itemLabel="Student" itemValue="student"/>
         <f:selectItem itemLabel="Teacher" itemValue="teacher"/>
         <f:selectItem itemLabel="Grader"  itemValue="grader"/>
-      </h:selectOneRadio>
-    </forms:field>
-    <forms:field label=""><h:commandButton value="Register" action="#{registrationUI.register}"/></forms:field>
-  </forms:form>
+      </p:selectOneRadio>
+      <p:message for="accountType"/>
+    </div>
+    
+    <div class="formField">
+      <p:commandButton value="Register" ajax="false" action="#{registrationUI.register}"/>
+    </div>
+    
+    <p:messages/>
+  </p:fieldset>
 </ui:composition>

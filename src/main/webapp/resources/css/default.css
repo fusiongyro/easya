@@ -12,22 +12,6 @@ body {
   font-smoothing:antialiased;
 }
 
-fieldset {
-  width: 210pt;
-}
-
-input {
-  width:200pt;
-  display:block;
-  -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-}
-
-textarea {
-  width:200pt;
-  display:block;
-  -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+.formField .ui-message-error {
+  margin: 4pt 0 12pt 0;
 }

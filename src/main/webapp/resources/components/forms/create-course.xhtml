@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:cc="http://java.sun.com/jsf/composite"
+  xmlns:f="http://java.sun.com/jsf/core">
+  <head><title></title></head>
+  <body>
+    <cc:interface>
+      <cc:attribute name="course" required="true"/>
+      <cc:attribute name="saveAction" method-signature="java.lang.String f()" required="true"/>
+    </cc:interface>
+    <cc:implementation>
+      <p:fieldset legend="Create Course">
+
+        <div class="formField">
+          <p:outputLabel for="name" value="Name"/><br/>
+          <p:inputText id="name" value="#{cc.attrs.course.name}" required="true">
+            <f:validateLength minimum="4" maximum="14"/>
+          </p:inputText><br/>
+          <p:message for="name"/>
+        </div>
+
+        <div class="formField">
+          <p:outputLabel for="shortCode" value="Short Code"/><br/>
+          <p:inputText id="shortCode" value="#{cc.attrs.course.shortCode}" required="true"/><br/>
+          <p:message for="shortCode"/>
+        </div>
+
+        <div class="formField">
+          <p:outputLabel value="Description" for="description"/><br/>
+          <p:inputTextarea id="description" rows="6" cols="40" value="#{cc.attrs.course.description}" required="true"/><br/>
+          <p:message for="description"/>
+        </div>
+
+        <div class="formField">
+          <p:commandButton value="Save" ajax="false" action="#{cc.attrs.saveAction}"/>
+        </div>
+      </p:fieldset>
+    </cc:implementation>
+  </body>
+</html>
+

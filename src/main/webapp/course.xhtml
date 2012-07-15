@@ -24,11 +24,12 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 -->
 <ui:composition
+  template="resources/templates/template.xhtml"
   xmlns="http://www.w3.org/1999/xhtml"
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:ui="http://java.sun.com/jsf/facelets"
-  template="resources/templates/template.xhtml"
-  xmlns:f="http://java.sun.com/jsf/core">
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:p="http://primefaces.org/ui">
   <ui:define name="title">#{courseUI.course.name}</ui:define>
   <h2>#{courseUI.course.name}</h2>
   <blockquote><h:outputText escape="false" value="#{courseUI.course.description}"/></blockquote>

@@ -25,12 +25,14 @@
 package org.storytotell.easya.ui;
 
 import java.io.Serializable;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.validation.constraints.NotNull;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.storytotell.easya.ejb.AccountManager;
 import org.storytotell.easya.entity.User;
@@ -41,11 +43,15 @@ import org.storytotell.easya.entity.User;
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @Named("registrationUI")
+@RequestScoped
 public class RegistrationUI implements Serializable {
   private static final long serialVersionUID = 1L;
   
-  private String username;
-  private String email, password, passwordConfirmation, accountType;
+  private @NotNull String username;
+  private @NotNull String email;
+  private @NotNull String password;
+  private @NotNull String passwordConfirmation;
+  private String accountType;
 
   public String getUsername()             { return username; }
   public String getEmail()                { return email; }

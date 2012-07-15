@@ -41,13 +41,11 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <cc:interface/>
     <cc:implementation>
       <shiro:guest>
-        <h:form>
         <p:overlayPanel for="loginButton"><forms:login/></p:overlayPanel>
         <p:overlayPanel for="registerButton"><forms:register/></p:overlayPanel>
         Welcome, guest! 
-          <p:commandLink id="loginButton" value="Login" type="button"/> or
-          <p:commandLink id="registerButton" value="Register" type="button"/>
-        </h:form>
+        <p:commandLink id="loginButton" value="Login" type="button"/> or
+        <p:commandLink id="registerButton" value="Register" type="button"/>
       </shiro:guest>
       <shiro:authenticated>
         <h:form>

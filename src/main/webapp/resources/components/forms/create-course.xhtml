@@ -13,32 +13,34 @@
       <cc:attribute name="saveAction" method-signature="java.lang.String f()" required="true"/>
     </cc:interface>
     <cc:implementation>
-      <p:fieldset legend="Create Course">
+      <h:form>
+        <p:fieldset legend="Create Course">
 
-        <div class="formField">
-          <p:outputLabel for="name" value="Name"/><br/>
-          <p:inputText id="name" value="#{cc.attrs.course.name}" required="true">
-            <f:validateLength minimum="4" maximum="14"/>
-          </p:inputText><br/>
-          <p:message for="name"/>
-        </div>
+          <div class="formField">
+            <p:outputLabel for="name" value="Name"/><br/>
+            <p:inputText id="name" value="#{cc.attrs.course.name}" required="true">
+              <f:validateLength minimum="4" maximum="14"/>
+            </p:inputText><br/>
+            <p:message for="name"/>
+          </div>
 
-        <div class="formField">
-          <p:outputLabel for="shortCode" value="Short Code"/><br/>
-          <p:inputText id="shortCode" value="#{cc.attrs.course.shortCode}" required="true"/><br/>
-          <p:message for="shortCode"/>
-        </div>
+          <div class="formField">
+            <p:outputLabel for="shortCode" value="Short Code"/><br/>
+            <p:inputText id="shortCode" value="#{cc.attrs.course.shortCode}" required="true"/><br/>
+            <p:message for="shortCode"/>
+          </div>
 
-        <div class="formField">
-          <p:outputLabel value="Description" for="description"/><br/>
-          <p:inputTextarea id="description" rows="6" cols="40" value="#{cc.attrs.course.description}" required="true"/><br/>
-          <p:message for="description"/>
-        </div>
+          <div class="formField">
+            <p:outputLabel value="Description" for="description"/><br/>
+            <p:inputTextarea id="description" rows="6" cols="40" value="#{cc.attrs.course.description}" required="true"/><br/>
+            <p:message for="description"/>
+          </div>
 
-        <div class="formField">
-          <p:commandButton value="Save" ajax="false" action="#{cc.attrs.saveAction}"/>
-        </div>
-      </p:fieldset>
+          <div class="formField">
+            <p:commandButton value="Save" ajax="false" action="#{cc.attrs.saveAction}"/>
+          </div>
+        </p:fieldset>
+      </h:form>
     </cc:implementation>
   </body>
 </html>

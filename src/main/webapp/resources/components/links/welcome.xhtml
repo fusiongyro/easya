@@ -31,7 +31,9 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   xmlns:pretty="http://ocpsoft.com/prettyfaces" 
   xmlns:ui="http://java.sun.com/jsf/facelets" 
   xmlns:h="http://java.sun.com/jsf/html"
-  xmlns:shiro="http://shiro.apache.org/tags">
+  xmlns:shiro="http://shiro.apache.org/tags"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:forms="http://java.sun.com/jsf/composite/components/forms">
   <head>
     <title>TODO supply a title</title>
   </head>
@@ -39,11 +41,19 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <cc:interface/>
     <cc:implementation>
       <shiro:guest>
-        Welcome, guest! <h:link outcome="pretty:login" value="Login"/>
+        <h:form>
+        <p:overlayPanel for="loginButton"><forms:login/></p:overlayPanel>
+        <p:overlayPanel for="registerButton"><forms:register/></p:overlayPanel>
+        Welcome, guest! 
+          <p:commandLink id="loginButton" value="Login" type="button"/> or
+          <p:commandLink id="registerButton" value="Register" type="button"/>
+        </h:form>
       </shiro:guest>
       <shiro:authenticated>
-        Welcome back, <h:outputText value="#{loggedInUserUI.currentUser.username}"/>! 
-        <h:commandLink value="Logout" action="#{authenticationUI.logout}"/>
+        <h:form>
+          Welcome back, <h:outputText value="#{loggedInUserUI.currentUser.username}"/>! 
+          <h:commandLink value="Logout" action="#{authenticationUI.logout}"/>
+        </h:form>
       </shiro:authenticated>
     </cc:implementation>
   </body>

@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:cc="http://java.sun.com/jsf/composite">
+  <head>
+    <title>Facelet Title</title>
+  </head>
+  <body>
+    <cc:interface/>
+    <cc:implementation>
+      <h:form>
+        <p:fieldset>
+          <div class="formField">
+            <p:outputLabel for="username" value="Username:"/><br/>
+            <p:inputText id="username" value="#{authenticationUI.username}"/>
+          </div>
+
+          <div class="formField">
+            <p:outputLabel for="password" value="Password:"/><br/>
+            <p:password id="password" value="#{authenticationUI.password}"/>
+          </div>
+
+          <ui:fragment>&nbsp;</ui:fragment>
+          <p:commandButton ajax="false" value="Login" action="#{authenticationUI.authenticate}"/>
+        </p:fieldset>
+
+        <p:messages/>
+      </h:form>
+    </cc:implementation>
+  </body>
+</html>
+

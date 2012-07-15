@@ -25,7 +25,6 @@
 package org.storytotell.easya.ui;
 
 import java.io.Serializable;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -41,7 +40,6 @@ import org.storytotell.easya.entity.User;
  * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@RequestScoped
 @Named("registrationUI")
 public class RegistrationUI implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -71,10 +69,11 @@ public class RegistrationUI implements Serializable {
     String encryptedPassword = passwordService.encryptPassword(password);
 
     user.setUsername(username);
+    
     user.setPassword(encryptedPassword);
     user.setEmailAddress(email);
     
-    accountManager.register(user);
+    accountManager.register(user); 
     
     login();
     return ""; // return "pretty:user"

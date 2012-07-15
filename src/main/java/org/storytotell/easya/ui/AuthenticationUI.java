@@ -75,7 +75,7 @@ public class AuthenticationUI implements Serializable {
     try {
       getCurrentUser().login(getAuthenticationToken());
     } catch (Exception e) {
-      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Login failed."));
+      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed.", "Login failed."));
     }
   }
   
@@ -101,8 +101,12 @@ public class AuthenticationUI implements Serializable {
   public String getUsername() { return username; }
   public String getPassword() { return password; }
 
-  public void setUsername(String username) { this.username = username; }
-  public void setPassword(String password) { this.password = password; }
+  public void setUsername(String username) { 
+    this.username = username; 
+  }
+  public void setPassword(String password) { 
+    this.password = password; 
+  }
 
   /**
    * Produce the authentication token needed by Apache Shiro.

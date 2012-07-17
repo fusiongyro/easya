@@ -41,16 +41,24 @@ public class Course implements Serializable {
   private @NotNull   String name;
   private            String description;
   private @ShortCode String shortCode;
+  private @NotNull   User   owner;
 
   public Long   getId()          { return id; }
   public String getName()        { return name; }
   public String getDescription() { return description; }
   public String getShortCode()   { return shortCode; }
+  public User   getOwner()       { return owner; }
   
   public void setId(Long id)                     { this.id = id; }
   public void setName(String name)               { this.name = name; }
   public void setDescription(String description) { this.description = description; }
   public void setShortCode(String shortCode)     { this.shortCode = shortCode; }
+  
+  public void setOwner(User owner) {
+    this.owner = owner;
+    if (!owner.getCourses().contains(this))
+      owner.addCourse(this);
+  }
 
   @Override
   public int hashCode() {

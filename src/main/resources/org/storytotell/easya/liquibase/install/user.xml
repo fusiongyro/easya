@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
   <changeSet id="CreateUsersAndPermissio" author="fusion">
     <createTable tableName="users">
-      <column name="username" type="varchar"><constraints nullable="false"/></column>
+      <column name="username" type="varchar"><constraints nullable="false" primaryKey="true"/></column>
       <column name="password" type="varchar"/>
       <column name="email"    type="varchar"><constraints nullable="false"/></column>
     </createTable>

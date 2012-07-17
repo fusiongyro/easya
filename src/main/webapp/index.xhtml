@@ -31,6 +31,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   xmlns:forms="http://java.sun.com/jsf/composite/components/forms"
   xmlns:p="http://primefaces.org/ui"
   xmlns:pe="http://primefaces.org/ui/extensions"
+  xmlns:shiro="http://shiro.apache.org/tags"
   template="resources/templates/template.xhtml">
   <h1>Easy A</h1>
   <p>Hello from Easy A!</p>
@@ -41,5 +42,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     </ui:repeat>
   </ol>
   
-  <forms:create-course course="#{courseUI.newCourse}" saveAction="#{courseUI.saveNew}"/>
+  <shiro:hasPermission name="course:create">
+    <forms:create-course course="#{courseUI.newCourse}" saveAction="#{courseUI.saveNew}"/>
+  </shiro:hasPermission>
 </ui:composition>

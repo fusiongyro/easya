@@ -44,13 +44,14 @@ import org.storytotell.easya.entity.User;
 @RequestScoped
 @Named("loggedInUserUI")
 public class LoggedInUserUI implements Serializable {
-  private @Produces @LoggedIn User currentUser;
-  private @Inject AccountManager accountManager;
-  private @Inject Subject currentSubject;
+  @Produces @LoggedIn private User currentUser = null;
+  @Inject private AccountManager accountManager;
+  @Inject private Subject currentSubject;
   
   @PostConstruct
   public void lookupUser() {
-    currentUser = accountManager.findByUsername(currentSubject.getPrincipal().toString());
+    if (currentSubject.isAuthenticated())
+      currentUser = accountManager.findByUsername(currentSubject.getPrincipal().toString());
   }
 
   public User getCurrentUser() { return currentUser; }

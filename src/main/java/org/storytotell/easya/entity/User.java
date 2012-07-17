@@ -25,6 +25,8 @@
 package org.storytotell.easya.entity;
 
 import java.io.Serializable;
+import java.util.List;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 
 
 /**
@@ -36,17 +38,35 @@ public class User implements Serializable {
   private static final long serialVersionUID = 1L;
   
   private String username, password, emailAddress;
+  
+  private List<Course> courses;
 
-  public String getUsername() { return username; }
-  public String getPassword() { return password; }
-  public String getEmailAddress() { return emailAddress; }
+  public String getUsername()      { return username; }
+  public String getPassword()      { return password; }
+  public String getEmailAddress()  { return emailAddress; }
+  public List<Course> getCourses() { return courses; }
 
-  public void setUsername(String username) { this.username = username; }
-  public void setPassword(String password) { this.password = password; }
+  public void setUsername(String username)         { this.username = username; }
+  public void setPassword(String password)         { this.password = password; }
   public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress; }
+  public void setCourses(List<Course> courses)     { this.courses = courses; }
 
+  public void addCourse(Course course) {
+    courses.add(course);
+    if (course.getOwner() != this)
+      course.setOwner(this);
+  }
+  
   @Override
   public String toString() {
     return "org.storytotell.easya.entity.User[" + username + "]";
+  }
+
+  public void copyPermissionsInto(SimpleAuthorizationInfo authz) {
+    // alert that I can edit and delete this course
+    for (Course c : getCourses()) {
+      authz.addStringPermission("course:edit:" + c.getId());
+      authz.addStringPermission("course:delete:" + c.getId());
+    }
   }
 }

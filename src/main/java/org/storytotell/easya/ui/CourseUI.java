@@ -29,9 +29,15 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
+import javax.inject.Inject;
 import javax.inject.Named;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.storytotell.easya.annotations.LoggedIn;
 import org.storytotell.easya.ejb.CourseManager;
 import org.storytotell.easya.entity.Course;
+import org.storytotell.easya.entity.User;
 import org.storytotell.easya.events.CourseCreated;
 
 /**
@@ -43,6 +49,7 @@ public class CourseUI {
   private static final Logger log = Logger.getLogger(CourseUI.class.getName());
   
   @EJB private CourseManager courseManager;
+  @Inject @LoggedIn private User user;
   
   private Course course;
   private String shortCode;
@@ -56,10 +63,21 @@ public class CourseUI {
     return newCourse;
   }
   
+  @RequiresAuthentication
+  @RequiresPermissions(value="course:create")
   public String saveNew() {
+    newCourse.setOwner(user);
     courseManager.save(newCourse);
     shortCode = newCourse.getShortCode();
     return "pretty:course";
+  }
+  
+  @RequiresAuthentication
+  public String delete() {
+    // ensure this user can delete this course
+    SecurityUtils.getSubject().checkPermission("course:delete:" + course.getId());
+    courseManager.delete(course);
+    return "pretty:home";
   }
   
   public void save() { courseManager.update(course); }

@@ -24,16 +24,18 @@
  */
 package org.storytotell.easya.annotations;
 
-import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
 
 /**
  * The annotated User shall be the currently logged-in User.
  * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Target({FIELD, METHOD, ANNOTATION_TYPE})
+@Qualifier
 @Retention(RUNTIME)
+@Target({METHOD, FIELD, PARAMETER, TYPE})
 public @interface LoggedIn {}

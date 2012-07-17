@@ -31,6 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.storytotell.easya.entity.User;
 import org.storytotell.easya.events.AccountRegistered;
 

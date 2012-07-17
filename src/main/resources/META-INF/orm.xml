@@ -15,6 +15,9 @@
       <basic name="name"><column nullable="false" unique="true"/></basic>
       <basic name="description"/>
       <basic name="shortCode"><column name="short_code" nullable="false" unique="true"/></basic>
+      <many-to-one name="owner">
+        <join-column name="owner"/>
+      </many-to-one>
     </attributes>
   </entity>
   
@@ -24,6 +27,7 @@
       <id name="username"/>
       <basic name="password"/>
       <basic name="emailAddress"><column name="email" nullable="false" unique="true"/></basic>
+      <one-to-many name="courses" mapped-by="owner"/>
     </attributes>
   </entity>
 </entity-mappings>

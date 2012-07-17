@@ -29,8 +29,13 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   xmlns:h="http://java.sun.com/jsf/html"
   xmlns:ui="http://java.sun.com/jsf/facelets"
   xmlns:f="http://java.sun.com/jsf/core"
-  xmlns:p="http://primefaces.org/ui">
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:shiro="http://shiro.apache.org/tags">
   <ui:define name="title">#{courseUI.course.name}</ui:define>
+  
   <h2>#{courseUI.course.name}</h2>
+  
+  <h:form><p:commandButton value="Delete #{courseUI.shortCode}" action="#{courseUI.delete}"/></h:form>
+  
   <blockquote><h:outputText escape="false" value="#{courseUI.course.description}"/></blockquote>
 </ui:composition>

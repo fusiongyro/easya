@@ -24,8 +24,6 @@
  */
 package org.storytotell.easya.ui;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
@@ -34,6 +32,8 @@ import javax.inject.Named;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.storytotell.easya.annotations.LoggedIn;
 import org.storytotell.easya.ejb.CourseManager;
 import org.storytotell.easya.entity.Course;
@@ -46,7 +46,7 @@ import org.storytotell.easya.events.CourseCreated;
 @Named("courseUI")
 @RequestScoped
 public class CourseUI {
-  private static final Logger log = Logger.getLogger(CourseUI.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(CourseUI.class.getName());
   
   @EJB private CourseManager courseManager;
   @Inject @LoggedIn private User user;
@@ -66,6 +66,7 @@ public class CourseUI {
   @RequiresAuthentication
   @RequiresPermissions(value="course:create")
   public String saveNew() {
+    log.debug("saving new course {}", course.getName());
     newCourse.setOwner(user);
     courseManager.save(newCourse);
     shortCode = newCourse.getShortCode();
@@ -74,14 +75,18 @@ public class CourseUI {
   
   public boolean getCanDelete() {
     boolean permitted = SecurityUtils.getSubject().isPermitted("course:delete:" + course.getId());
+    log.debug("determining that the current subject can{} delete course {}", permitted ? "" : "NOT", course.getName());
     return permitted;
   }
   
   public String delete() {
+    log.debug("delete course called");
     // ensure this user can delete this course
     SecurityUtils.getSubject().checkPermission("course:delete:" + course.getId());
+    log.debug("removing course");
     user.removeCourse(course);
     courseManager.remove(course);
+    log.debug("going home");
     return "pretty:home";
   }
   
@@ -96,10 +101,11 @@ public class CourseUI {
   public void setName(String name) { course.setName(name); }
   
   public void logCourseCreated(@Observes CourseCreated created) {
-    log.log(Level.INFO, "just saw a course get created with name {0}", created.getNewCourse().getName());
+    log.debug("just saw a course get created with name {0}", created.getNewCourse().getName());
   }
 
   public void loadFromShortCode() {
+    log.debug("loading from short code {}", shortCode);
     if (shortCode != null)
       course = courseManager.findByShortCode(shortCode);
   }

@@ -24,8 +24,6 @@
  */
 package org.storytotell.easya.shiro;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import org.apache.shiro.authc.*;
@@ -34,6 +32,8 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.storytotell.easya.ejb.AccountManager;
 import org.storytotell.easya.entity.User;
 
@@ -42,6 +42,7 @@ import org.storytotell.easya.entity.User;
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 public class MyRealm extends AuthorizingRealm {
+  private static final Logger log = LoggerFactory.getLogger(MyRealm.class);
   private PasswordService passwordService = null;
 
   public PasswordService getPasswordService() { return this.passwordService; }
@@ -52,7 +53,7 @@ public class MyRealm extends AuthorizingRealm {
       InitialContext ic = new InitialContext();
       return (AccountManager) ic.lookup("java:module/AccountManager");
     } catch (NamingException ex) {
-      Logger.getLogger(MyRealm.class.getName()).log(Level.SEVERE, null, ex);
+      log.error("unable to get the account manager", ex);
     }
     return null;
   }

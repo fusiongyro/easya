@@ -61,10 +61,10 @@
       <artifactId>shiro-web</artifactId>
       <version>1.2.0</version>
     </dependency>
-    <dependency> 
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>1.6.6</version>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>0.9.24</version>
     </dependency>
     <dependency>
       <groupId>commons-beanutils</groupId>
@@ -150,6 +150,12 @@
   
   <repositories>
     <repository>
+      <url>http://repo2.maven.org/maven2/</url>
+      <id>central2</id>
+      <layout>default</layout>
+      <name>central 2</name>
+    </repository>
+    <repository>
       <url>http://central.maven.org/maven2/</url>
       <id>central</id>
       <layout>default</layout>
@@ -179,6 +185,7 @@
       <name>PrimeFaces Maven Repository</name>  
       <url>http://repository.primefaces.org</url>  
       <layout>default</layout>  
-    </repository>  
+    </repository>
+    
   </repositories>
 </project>

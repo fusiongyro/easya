@@ -25,7 +25,6 @@
 package org.storytotell.easya.ejb;
 
 import java.util.List;
-import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
@@ -33,6 +32,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.storytotell.easya.entity.Course;
 import org.storytotell.easya.events.CourseCreated;
 
@@ -45,12 +46,13 @@ import org.storytotell.easya.events.CourseCreated;
 @LocalBean
 @Named("CourseManager")
 public class CourseManager {
-  private static final Logger log = Logger.getLogger(CourseManager.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(CourseManager.class.getName());
   @PersistenceContext private EntityManager entityManager;
   
   private @Inject Event<CourseCreated> courseCreatedEvent;
   
   public Course findById(long id) {
+    log.debug("Finding course by ID {}", id);
     return entityManager.find(Course.class, id);
   }
 
@@ -58,6 +60,7 @@ public class CourseManager {
    * Save a brand new course to the database.
    */
   public void save(Course course) {
+    log.debug("Saving course {}", course.getName());
     entityManager.persist(course);
     courseCreatedEvent.fire(new CourseCreated(course));
   }
@@ -66,6 +69,7 @@ public class CourseManager {
    * Persist changes to this course to the database.
    */
   public void update(Course course) { 
+    log.debug("Updating course {}", course.getName());
     entityManager.merge(course);
   }
 
@@ -73,6 +77,7 @@ public class CourseManager {
    * Locate a course by the short code (e.g.: CS-113).
    */
   public Course findByShortCode(String shortCode) {
+    log.debug("Finding course by short code \"{}\"", shortCode);
     return entityManager
             .createQuery("SELECT c FROM Course c WHERE c.shortCode = :shortCode", Course.class)
             .setParameter("shortCode", shortCode)
@@ -85,10 +90,13 @@ public class CourseManager {
    * refinement.
    */
   public List<Course> getFrontPageCourses() {
-    return entityManager.createQuery("SELECT c FROM Course c", Course.class).getResultList();
+    log.debug("Finding front page courses");
+    String query = "SELECT c FROM Course c";
+    return entityManager.createQuery(query, Course.class).getResultList();
   }
 
   public void remove(Course course) {
+    log.debug("Deleting course {}" + course.getName());
     course = entityManager.merge(course);
     entityManager.remove(course);
   }

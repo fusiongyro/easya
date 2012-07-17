@@ -31,7 +31,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.apache.shiro.authc.credential.PasswordService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.storytotell.easya.entity.User;
 import org.storytotell.easya.events.AccountRegistered;
 
@@ -44,6 +45,7 @@ import org.storytotell.easya.events.AccountRegistered;
 @LocalBean
 @Named("AccountManager")
 public class AccountManager {
+  private static final Logger log = LoggerFactory.getLogger(AccountManager.class);
   private @PersistenceContext EntityManager em;
 
   private @Inject Event<AccountRegistered> accountRegistered;
@@ -53,11 +55,20 @@ public class AccountManager {
   }
   
   public boolean isUsernameTaken(String username) {
-    long count = (Long)em.createQuery("SELECT COUNT(u) FROM User u WHERE u.username = :username").setParameter("username", username).getSingleResult();
+    log.debug("verifying availability of {}", username);
+    
+    String query = "SELECT COUNT(u) FROM User u WHERE u.username = :username";
+    
+    long count = (Long)em.createQuery(query)
+            .setParameter("username", username)
+            .getSingleResult();
+    
     return count == 1;
   }
   
   public void register(User user) {
+    log.debug("registering {}", user.getUsername());
+    
     em.persist(user);
     accountRegistered.fire(new AccountRegistered(user));
   }

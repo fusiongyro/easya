@@ -26,8 +26,9 @@ package org.storytotell.easya.entity;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.logging.Logger;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -41,7 +42,7 @@ public class User implements Serializable {
   private String username, password, emailAddress;
   
   private List<Course> courses;
-  private static final Logger log = Logger.getLogger(User.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(User.class);
 
   public String getUsername()      { return username; }
   public String getPassword()      { return password; }

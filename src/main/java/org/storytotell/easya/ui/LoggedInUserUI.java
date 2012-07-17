@@ -56,9 +56,4 @@ public class LoggedInUserUI implements Serializable {
   }
 
   public User getCurrentUser() { return currentUser; }
-  
-  @PreDestroy
-  private void saveChanges() {
-    accountManager.save(currentUser);
-  }
 }

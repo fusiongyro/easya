@@ -35,12 +35,15 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   
   <h2>#{courseUI.course.name}</h2>
   
-    <h:form>
-      <p:commandButton 
-        value="Delete #{courseUI.shortCode}" 
-        action="#{courseUI.delete}"
-        ajax="false"
-        rendered="#{courseUI.canDelete}"/>
-    </h:form>
-  <blockquote><h:outputText escape="false" value="#{courseUI.course.description}"/></blockquote>
+  <h:form>
+    <p:commandButton 
+      value="Delete #{courseUI.shortCode}" 
+      action="#{courseUI.delete}"
+      ajax="false"
+      rendered="#{courseUI.canDelete}"/>
+  </h:form>
+  
+  <blockquote>
+    <h:outputText escape="false" value="#{courseUI.course.description}"/>
+  </blockquote>
 </ui:composition>

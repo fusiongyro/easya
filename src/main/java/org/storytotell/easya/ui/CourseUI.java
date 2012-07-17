@@ -73,13 +73,15 @@ public class CourseUI {
   }
   
   public boolean getCanDelete() {
-    return SecurityUtils.getSubject().isPermitted("course:delete:" + course.getId());
+    boolean permitted = SecurityUtils.getSubject().isPermitted("course:delete:" + course.getId());
+    return permitted;
   }
   
   public String delete() {
     // ensure this user can delete this course
     SecurityUtils.getSubject().checkPermission("course:delete:" + course.getId());
     user.removeCourse(course);
+    courseManager.remove(course);
     return "pretty:home";
   }
   

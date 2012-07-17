@@ -27,9 +27,7 @@
       <id name="username"/>
       <basic name="password"/>
       <basic name="emailAddress"><column name="email" nullable="false" unique="true"/></basic>
-      <one-to-many name="courses" mapped-by="owner" orphan-removal="true">
-        <cascade><cascade-all/></cascade>
-      </one-to-many>
+      <one-to-many name="courses" mapped-by="owner"/>
     </attributes>
   </entity>
 </entity-mappings>

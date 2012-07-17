@@ -2,7 +2,7 @@
 <entity-mappings 
   xmlns="http://java.sun.com/xml/ns/persistence/orm" 
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_1_0.xsd" version="1.0">
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd" version="2.0">
 
   <package>org.storytotell.easya.entity</package>
   
@@ -27,7 +27,9 @@
       <id name="username"/>
       <basic name="password"/>
       <basic name="emailAddress"><column name="email" nullable="false" unique="true"/></basic>
-      <one-to-many name="courses" mapped-by="owner"/>
+      <one-to-many name="courses" mapped-by="owner" orphan-removal="true">
+        <cascade><cascade-all/></cascade>
+      </one-to-many>
     </attributes>
   </entity>
 </entity-mappings>

@@ -61,4 +61,8 @@ public class AccountManager {
     em.persist(user);
     accountRegistered.fire(new AccountRegistered(user));
   }
+
+  public void save(User currentUser) {
+    em.merge(currentUser);
+  }
 }

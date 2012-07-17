@@ -72,11 +72,14 @@ public class CourseUI {
     return "pretty:course";
   }
   
-  @RequiresAuthentication
+  public boolean getCanDelete() {
+    return SecurityUtils.getSubject().isPermitted("course:delete:" + course.getId());
+  }
+  
   public String delete() {
     // ensure this user can delete this course
     SecurityUtils.getSubject().checkPermission("course:delete:" + course.getId());
-    courseManager.delete(course);
+    user.removeCourse(course);
     return "pretty:home";
   }
   

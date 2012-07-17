@@ -87,12 +87,4 @@ public class CourseManager {
   public List<Course> getFrontPageCourses() {
     return entityManager.createQuery("SELECT c FROM Course c", Course.class).getResultList();
   }
-  
-  /**
-   * Delete the course
-   */
-  public void delete(Course course) {
-    course = entityManager.merge(course);
-    entityManager.remove(course);
-  }
 }

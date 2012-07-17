@@ -82,9 +82,7 @@ public class MyRealm extends AuthorizingRealm {
     
     // put the standard permissions on this auth info
     copyStandardAuthenticatedUserPermissionsInto(authz);
-    
-    clearCachedAuthorizationInfo(principals);
-    
+        
     return authz;
   }
 

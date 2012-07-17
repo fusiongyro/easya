@@ -56,7 +56,7 @@ public class Course implements Serializable {
   
   public void setOwner(User owner) {
     this.owner = owner;
-    if (!owner.getCourses().contains(this))
+    if (owner != null && !owner.getCourses().contains(this))
       owner.addCourse(this);
   }
 

@@ -26,6 +26,7 @@ package org.storytotell.easya.ui;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -55,4 +56,9 @@ public class LoggedInUserUI implements Serializable {
   }
 
   public User getCurrentUser() { return currentUser; }
+  
+  @PreDestroy
+  private void saveChanges() {
+    accountManager.save(currentUser);
+  }
 }

@@ -29,6 +29,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import org.apache.shiro.SecurityUtils;
@@ -41,6 +42,9 @@ import org.apache.shiro.web.env.IniWebEnvironment;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.storytotell.easya.annotations.LoggedIn;
+import org.storytotell.easya.ejb.AccountManager;
+import org.storytotell.easya.entity.User;
 
 /**
  * Managed bean to handle login and logout.
@@ -55,26 +59,35 @@ public class AuthenticationUI implements Serializable {
   private static final Logger log = LoggerFactory.getLogger(AuthenticationUI.class);
   private String username, password;
 
-  public @Produces IniWebEnvironment getWebEnvironment() {
+  @Inject private AccountManager accountManager;
+  
+  private IniWebEnvironment getWebEnvironment() {
     ServletContext ctx = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
     return (IniWebEnvironment)WebUtils.getRequiredWebEnvironment(ctx);
   }
   
-  public @Produces PasswordService getPasswordService() {
+  private PasswordService getPasswordService() {
     return getWebEnvironment().getObject("passwordService", HashingPasswordService.class);
   }
   
-  public @Produces Subject getCurrentUser() { 
-    return SecurityUtils.getSubject();
+  public @Produces @LoggedIn User getLoggedInUser() {
+    Subject subject = SecurityUtils.getSubject();
+    
+    if (!subject.isAuthenticated())
+      return null;
+    
+    return accountManager.findByUsername((String)subject.getPrincipal());
   }
-
+  
   /**
    * Attempt to log in with the currently-defined properties.
    */
   public void authenticate() {
     try {
-      getCurrentUser().login(getAuthenticationToken());
+      SecurityUtils.getSubject().login(getAuthenticationToken());
+      log.debug("successful authentication");
     } catch (Exception e) {
+      log.debug("authentication failed");
       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed.", "Login failed."));
     }
   }
@@ -95,7 +108,7 @@ public class AuthenticationUI implements Serializable {
    * Close the current session for the currently logged-in user.
    */
   public void logout() {
-    getCurrentUser().logout();
+    SecurityUtils.getSubject().logout();
   }
   
   public String getUsername() { return username; }
@@ -113,5 +126,9 @@ public class AuthenticationUI implements Serializable {
    */
   private AuthenticationToken getAuthenticationToken() {
     return new UsernamePasswordToken(username, password);
+  }
+
+  public String encryptPassword(String password) {
+    return getPasswordService().encryptPassword(password);
   }
 }

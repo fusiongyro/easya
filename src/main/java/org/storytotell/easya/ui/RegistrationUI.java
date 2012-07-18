@@ -66,13 +66,12 @@ public class RegistrationUI implements Serializable {
   public void setAccountType(String accountType)           { this.accountType = accountType; }
   
   private @Inject AuthenticationUI authenticationUI;
-  private @Inject PasswordService  passwordService;
   private @Inject AccountManager accountManager;
   
   public String register() {
     User user = new User();
 
-    String encryptedPassword = passwordService.encryptPassword(password);
+    String encryptedPassword = authenticationUI.encryptPassword(password);
 
     user.setUsername(username);
     

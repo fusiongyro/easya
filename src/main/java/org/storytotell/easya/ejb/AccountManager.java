@@ -51,6 +51,7 @@ public class AccountManager {
   private @Inject Event<AccountRegistered> accountRegistered;
 
   public User findByUsername(String username) {
+    log.debug("looking up user by username {}", username);
     return em.find(User.class, username);
   }
   

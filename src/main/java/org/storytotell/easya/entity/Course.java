@@ -81,6 +81,6 @@ public class Course implements Serializable {
 
   @Override
   public String toString() {
-    return "org.storytotell.easya.entity.Course[ id=" + id + " ]";
+    return "org.storytotell.easya.entity.Course[id=" + id + ", shortCode=" + shortCode + "]";
   }
 }

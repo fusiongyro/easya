@@ -66,7 +66,7 @@ public class CourseUI {
   @RequiresAuthentication
   @RequiresPermissions(value="course:create")
   public String saveNew() {
-    log.debug("saving new course {}", course.getName());
+    log.debug("saving new course {}", newCourse.getName());
     newCourse.setOwner(user);
     courseManager.save(newCourse);
     shortCode = newCourse.getShortCode();

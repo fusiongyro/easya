@@ -61,7 +61,13 @@ public class CourseManager {
    */
   public void save(Course course) {
     log.debug("Saving course {}", course.getName());
+    
+    // this creates the course
     entityManager.persist(course);
+    
+    // this causes the "owner"'s list of courses to be persisted as well
+    entityManager.merge(course.getOwner());
+    
     courseCreatedEvent.fire(new CourseCreated(course));
   }
 

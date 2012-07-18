@@ -19,3 +19,9 @@ body {
 .formField {
   margin-bottom: 12pt;
 }
+
+/* UI overloads */
+.ui-toolbar .ui-button-text-only .ui-button-text {
+  line-height: normal;
+  padding: 0.1em 0.4em;
+}

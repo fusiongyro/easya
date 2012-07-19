@@ -35,18 +35,17 @@
 
       <div class="formField">
         <p:outputLabel value="Password" for="password"/><br/>
-        <p:password id="password" value="#{registrationUI.password}" match="passwordConfirmation">
+        <p:password id="password" value="#{registrationUI.password}" match="passwordConfirmation" required="true">
           <p:ajax update="msgPassword" event="valueChange"/>
         </p:password>
-        <p:message for="password" id="msgPassword"/>
       </div>
 
       <div class="formField">
         <p:outputLabel value="Password (confirmation)" for="passwordConfirmation"/><br/>
-        <p:password id="passwordConfirmation" value="#{registrationUI.passwordConfirmation}">
-          <p:ajax update="msgPasswordConfirmation,msgPassword" event="valueChange"/>
+        <p:password id="passwordConfirmation" value="#{registrationUI.password}" required="true">
+          <p:ajax process="password,passwordConfirmation" update="msgPassword" event="valueChange"/>
         </p:password>
-        <p:message for="passwordConfirmation" id="msgPasswordConfirmation"/>
+        <p:message for="password" id="msgPassword"/>
       </div>
 
       <div class="formField">

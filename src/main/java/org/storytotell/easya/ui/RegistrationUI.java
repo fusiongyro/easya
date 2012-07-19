@@ -50,19 +50,16 @@ public class RegistrationUI implements Serializable {
   private @NotNull String username;
   private @NotNull String email;
   private @NotNull String password;
-  private @NotNull String passwordConfirmation;
   private String accountType;
 
   public String getUsername()             { return username; }
   public String getEmail()                { return email; }
   public String getPassword()             { return password; }
-  public String getPasswordConfirmation() { return passwordConfirmation; }
   public String getAccountType()          { return accountType; }
 
   public void setUsername(String username)                 { this.username = username; }
   public void setEmail(String email)                       { this.email = email; }
   public void setPassword(String password)                 { this.password = password; }
-  public void setPasswordConfirmation(String confirmation) { this.passwordConfirmation = confirmation; }
   public void setAccountType(String accountType)           { this.accountType = accountType; }
   
   private @Inject AuthenticationUI authenticationUI;

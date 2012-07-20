@@ -26,6 +26,7 @@ package org.storytotell.easya.ui;
 
 import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Event;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -46,6 +47,8 @@ import org.storytotell.easya.annotations.Logged;
 import org.storytotell.easya.annotations.LoggedIn;
 import org.storytotell.easya.ejb.AccountManager;
 import org.storytotell.easya.entity.User;
+import org.storytotell.easya.events.Login;
+import org.storytotell.easya.events.Logout;
 
 /**
  * Managed bean to handle login and logout.
@@ -62,6 +65,8 @@ public class AuthenticationUI implements Serializable {
   private String username, password;
 
   @Inject private AccountManager accountManager;
+  @Inject private Event<Login>   loginEvent;
+  @Inject private Event<Logout>  logoutEvent;
   
   private IniWebEnvironment getWebEnvironment() {
     ServletContext ctx = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
@@ -88,6 +93,7 @@ public class AuthenticationUI implements Serializable {
     try {
       SecurityUtils.getSubject().login(getAuthenticationToken());
       log.info("Successful login by {}", SecurityUtils.getSubject().getPrincipal());
+      loginEvent.fire(new Login(getLoggedInUser()));
     } catch (Exception e) {
       log.info("Failed login by {}", SecurityUtils.getSubject().getPrincipal());
       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed.", "Login failed."));
@@ -110,7 +116,9 @@ public class AuthenticationUI implements Serializable {
    * Close the current session for the currently logged-in user.
    */
   public void logout() {
+    User u = getLoggedInUser();
     SecurityUtils.getSubject().logout();
+    logoutEvent.fire(new Logout(u));
   }
   
   public String getUsername() { return username; }

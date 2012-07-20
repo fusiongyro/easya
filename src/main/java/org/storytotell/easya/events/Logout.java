@@ -22,49 +22,31 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.easya.ui;
+package org.storytotell.easya.events;
 
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
-import org.storytotell.easya.annotations.Logged;
-import org.storytotell.easya.events.CourseDeleted;
-import org.storytotell.easya.events.HasFacesMessage;
-import org.storytotell.easya.events.Login;
-import org.storytotell.easya.events.Logout;
+import javax.faces.application.FacesMessage;
+import org.storytotell.easya.entity.User;
 
 /**
- * Catches some interesting events and sends them to the user.
+ * Broadcast when someone logs out.
  * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Named
-@RequestScoped
-@Logged
-public class EventBroadcaster {
-  /**
-   * Catch a delete course event.
-   * @param deleteEvent 
-   */
-  public void onCourseDeleted(@Observes CourseDeleted deleteEvent) {
-    broadcast(deleteEvent);
+public class Logout implements HasFacesMessage {
+  private User user;
+
+  public User getUser() {
+    return user;
   }
-  
-  public void onLogin(@Observes Login loginEvent) {
-    broadcast(loginEvent);
+
+  public Logout(User user) {
+    this.user = user;
   }
-  
-  public void onLogout(@Observes Logout logoutEvent) {
-    broadcast(logoutEvent);
-  }
-  
-  /**
-   * Send something with a FacesMessage on to JSF.
-   * @param obj the object that can be converted
-   */
-  public void broadcast(HasFacesMessage obj) {
-    FacesContext ctx = FacesContext.getCurrentInstance();
-    ctx.addMessage(null, obj.getFacesMessage());
+
+  @Override
+  public FacesMessage getFacesMessage() {
+    String summary = "You are now logged out";
+    String detail = "See you later, " + user.getUsername() + "!";
+    return new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
   }
 }

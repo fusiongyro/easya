@@ -48,8 +48,8 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <p:commandButton id="registerButton" value="Register" type="button"/>
           </p:toolbarGroup>
         </p:toolbar>
-        <p:overlayPanel for="loginButton"><forms:login/></p:overlayPanel>
-        <p:overlayPanel for="registerButton"><forms:register/></p:overlayPanel>
+        <p:overlayPanel for="loginButton" onShow="setTimeout(function(){loginUsernameInput.jq.focus()},100)"><forms:login/></p:overlayPanel>
+        <p:overlayPanel for="registerButton" onShow="setTimeout(function(){registrationUsernameInput.jq.focus()},100)"><forms:register/></p:overlayPanel>
       </shiro:guest>
       <shiro:authenticated>
         <h:form>

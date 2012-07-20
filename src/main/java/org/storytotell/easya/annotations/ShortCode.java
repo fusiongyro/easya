@@ -22,7 +22,7 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.easya.validations.annotations;
+package org.storytotell.easya.annotations;
 
 import static java.lang.annotation.ElementType.*;
 import java.lang.annotation.Retention;

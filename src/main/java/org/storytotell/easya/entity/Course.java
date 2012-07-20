@@ -26,7 +26,7 @@ package org.storytotell.easya.entity;
 
 import java.io.Serializable;
 import javax.validation.constraints.NotNull;
-import org.storytotell.easya.validations.annotations.ShortCode;
+import org.storytotell.easya.annotations.ShortCode;
 
 /**
  * Represents a particular class on a particular topic taught by a particular

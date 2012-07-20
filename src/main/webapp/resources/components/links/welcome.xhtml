@@ -42,6 +42,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <cc:implementation>
       <shiro:guest>
         <p:toolbar>
+          <p:toolbarGroup align="left"><h2>Easy A</h2></p:toolbarGroup>
           <p:toolbarGroup align="right">
             Welcome, guest! 
             <p:commandButton id="loginButton" value="Login" type="button"/> or
@@ -54,6 +55,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <shiro:authenticated>
         <h:form>
           <p:toolbar>
+            <p:toolbarGroup align="left"><h2>Easy A</h2></p:toolbarGroup>
             <p:toolbarGroup align="right">
               Welcome back, <shiro:principal/>! 
               <p:commandButton value="Logout" action="#{authenticationUI.logout}" ajax="false"/>

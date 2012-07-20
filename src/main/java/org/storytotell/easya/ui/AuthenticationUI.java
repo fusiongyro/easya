@@ -47,6 +47,7 @@ import org.storytotell.easya.annotations.Logged;
 import org.storytotell.easya.annotations.LoggedIn;
 import org.storytotell.easya.ejb.AccountManager;
 import org.storytotell.easya.entity.User;
+import org.storytotell.easya.events.FailedLoginAttempt;
 import org.storytotell.easya.events.Login;
 import org.storytotell.easya.events.Logout;
 
@@ -64,9 +65,10 @@ public class AuthenticationUI implements Serializable {
   private static final Logger log = LoggerFactory.getLogger(AuthenticationUI.class);
   private String username, password;
 
-  @Inject private AccountManager accountManager;
-  @Inject private Event<Login>   loginEvent;
-  @Inject private Event<Logout>  logoutEvent;
+  @Inject private AccountManager            accountManager;
+  @Inject private Event<Login>              loginEvent;
+  @Inject private Event<Logout>             logoutEvent;
+  @Inject private Event<FailedLoginAttempt> failedLoginEvent;
   
   private IniWebEnvironment getWebEnvironment() {
     ServletContext ctx = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
@@ -92,11 +94,12 @@ public class AuthenticationUI implements Serializable {
   public void authenticate() {
     try {
       SecurityUtils.getSubject().login(getAuthenticationToken());
-      log.info("Successful login by {}", SecurityUtils.getSubject().getPrincipal());
+      
+      log.info("Successful login by {}", username);
       loginEvent.fire(new Login(getLoggedInUser()));
     } catch (Exception e) {
-      log.info("Failed login by {}", SecurityUtils.getSubject().getPrincipal());
-      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed.", "Login failed."));
+      log.info("Failed login by {}", username);
+      failedLoginEvent.fire(new FailedLoginAttempt(getAuthenticationToken()));
     }
   }
   

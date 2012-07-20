@@ -22,34 +22,30 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.easya.ui;
+package org.storytotell.easya.events;
 
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
-import org.storytotell.easya.annotations.Logged;
-import org.storytotell.easya.events.CourseDeleted;
-import org.storytotell.easya.events.FailedLoginAttempt;
-import org.storytotell.easya.events.HasFacesMessage;
-import org.storytotell.easya.events.Login;
-import org.storytotell.easya.events.Logout;
+import javax.faces.application.FacesMessage;
+import org.apache.shiro.authc.AuthenticationToken;
 
 /**
- * Catches some interesting events and sends them to the user.
- * 
+ *
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Named
-@RequestScoped
-@Logged
-public class EventBroadcaster {
-  /**
-   * Send something with a FacesMessage on to JSF.
-   * @param obj the object that can be converted
-   */
-  public void broadcast(@Observes HasFacesMessage obj) {
-    FacesContext ctx = FacesContext.getCurrentInstance();
-    ctx.addMessage(null, obj.getFacesMessage());
+public class FailedLoginAttempt implements HasFacesMessage {
+  private AuthenticationToken attempt;
+
+  public FailedLoginAttempt(AuthenticationToken attempt) {
+    this.attempt = attempt;
+  }
+
+  public AuthenticationToken getAttempt() {
+    return attempt;
+  }
+  
+  @Override
+  public FacesMessage getFacesMessage() {
+    String summary = "Login failed.";
+    String details = "Please double-check your username and password and try again.";
+    return new FacesMessage(FacesMessage.SEVERITY_WARN, summary, details);
   }
 }

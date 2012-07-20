@@ -33,7 +33,7 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
-import org.apache.shiro.authc.credential.PasswordService;
+import org.storytotell.easya.annotations.Logged;
 import org.storytotell.easya.ejb.AccountManager;
 import org.storytotell.easya.entity.User;
 
@@ -43,6 +43,7 @@ import org.storytotell.easya.entity.User;
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @Named("registrationUI")
+@Logged
 @RequestScoped
 public class RegistrationUI implements Serializable {
   private static final long serialVersionUID = 1L;

@@ -33,6 +33,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.storytotell.easya.annotations.Logged;
 import org.storytotell.easya.entity.User;
 import org.storytotell.easya.events.AccountRegistered;
 
@@ -43,6 +44,7 @@ import org.storytotell.easya.events.AccountRegistered;
  */
 @Stateless
 @LocalBean
+@Logged
 @Named("AccountManager")
 public class AccountManager {
   private static final Logger log = LoggerFactory.getLogger(AccountManager.class);
@@ -51,13 +53,10 @@ public class AccountManager {
   private @Inject Event<AccountRegistered> accountRegistered;
 
   public User findByUsername(String username) {
-    log.debug("looking up user by username {}", username);
     return em.find(User.class, username);
   }
   
   public boolean isUsernameTaken(String username) {
-    log.debug("verifying availability of {}", username);
-    
     String query = "SELECT COUNT(u) FROM User u WHERE u.username = :username";
     
     long count = (Long)em.createQuery(query)
@@ -68,8 +67,6 @@ public class AccountManager {
   }
   
   public void register(User user) {
-    log.debug("registering {}", user.getUsername());
-    
     em.persist(user);
     accountRegistered.fire(new AccountRegistered(user));
   }

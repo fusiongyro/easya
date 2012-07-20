@@ -33,7 +33,9 @@ import org.slf4j.LoggerFactory;
 import org.storytotell.easya.annotations.Logged;
 
 /**
- *
+ * Implements {@code @Logged} by examining the context, finding the appropriate 
+ * logger and invoking it with the arguments.
+ * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @Interceptor
@@ -43,14 +45,29 @@ public class LoggingInterceptor implements Serializable {
   
   @AroundInvoke
   public Object logMethodEntry(InvocationContext ctx) throws Exception {
+    Logger log = LoggerFactory.getLogger(ctx.getTarget().getClass());
+    
+    // early exit if logging is disabled
+    if (!log.isTraceEnabled()) return ctx.proceed();
+    
+    // generate the log statement
     String method = ctx.getMethod().getName();
     String arguments = parametersAsString(ctx.getParameters());
     
-    Logger log = LoggerFactory.getLogger(ctx.getTarget().getClass());
-    log.trace("called {}({})", method, arguments);
-    return ctx.proceed();
+    log.trace("entering {}({})", method, arguments);
+    try {
+      Object result = ctx.proceed();
+      log.trace("leaving {}({})", method, arguments);
+      return result;
+    } catch (Exception e) {
+      log.trace("exception in {}: {}", method, e);
+      throw e;
+    }
   }
 
+  /**
+   * Generate the argument list for a function call based on these args.
+   */
   private String parametersAsString(Object[] args) {
     StringBuilder methodArguments = new StringBuilder();
 

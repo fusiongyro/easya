@@ -34,6 +34,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.storytotell.easya.annotations.Logged;
 import org.storytotell.easya.entity.Course;
 import org.storytotell.easya.events.CourseCreated;
 
@@ -45,14 +46,14 @@ import org.storytotell.easya.events.CourseCreated;
 @Stateless
 @LocalBean
 @Named("CourseManager")
+@Logged
 public class CourseManager {
-  private static final Logger log = LoggerFactory.getLogger(CourseManager.class.getName());
+  private static final Logger log = LoggerFactory.getLogger(CourseManager.class);
   @PersistenceContext private EntityManager entityManager;
   
   private @Inject Event<CourseCreated> courseCreatedEvent;
   
   public Course findById(long id) {
-    log.debug("Finding course by ID {}", id);
     return entityManager.find(Course.class, id);
   }
 
@@ -60,8 +61,6 @@ public class CourseManager {
    * Save a brand new course to the database.
    */
   public void save(Course course) {
-    log.debug("Saving course {}", course.getName());
-    
     // this creates the course
     entityManager.persist(course);
     
@@ -75,7 +74,6 @@ public class CourseManager {
    * Persist changes to this course to the database.
    */
   public void update(Course course) { 
-    log.debug("Updating course {}", course.getName());
     entityManager.merge(course);
   }
 
@@ -83,7 +81,6 @@ public class CourseManager {
    * Locate a course by the short code (e.g.: CS-113).
    */
   public Course findByShortCode(String shortCode) {
-    log.debug("Finding course by short code \"{}\"", shortCode);
     return entityManager
             .createQuery("SELECT c FROM Course c WHERE c.shortCode = :shortCode", Course.class)
             .setParameter("shortCode", shortCode)
@@ -96,13 +93,13 @@ public class CourseManager {
    * refinement.
    */
   public List<Course> getFrontPageCourses() {
-    log.debug("Finding front page courses");
     String query = "SELECT c FROM Course c";
     return entityManager.createQuery(query, Course.class).getResultList();
   }
 
+  public String getHello() { return "Hello!"; }
+  
   public void remove(Course course) {
-    log.debug("Deleting course {}" + course.getName());
     course = entityManager.merge(course);
     entityManager.remove(course);
   }

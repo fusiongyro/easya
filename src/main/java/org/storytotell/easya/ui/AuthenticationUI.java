@@ -42,6 +42,7 @@ import org.apache.shiro.web.env.IniWebEnvironment;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.storytotell.easya.annotations.Logged;
 import org.storytotell.easya.annotations.LoggedIn;
 import org.storytotell.easya.ejb.AccountManager;
 import org.storytotell.easya.entity.User;
@@ -52,6 +53,7 @@ import org.storytotell.easya.entity.User;
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @RequestScoped
+@Logged
 @Named("authenticationUI")
 public class AuthenticationUI implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -85,9 +87,9 @@ public class AuthenticationUI implements Serializable {
   public void authenticate() {
     try {
       SecurityUtils.getSubject().login(getAuthenticationToken());
-      log.debug("successful authentication");
+      log.info("Successful login by {}", SecurityUtils.getSubject().getPrincipal());
     } catch (Exception e) {
-      log.debug("authentication failed");
+      log.info("Failed login by {}", SecurityUtils.getSubject().getPrincipal());
       FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed.", "Login failed."));
     }
   }

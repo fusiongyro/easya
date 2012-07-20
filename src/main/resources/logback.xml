@@ -7,7 +7,7 @@
     </layout>
   </appender>
   
-  <logger name="org.storytotell.easya" level="TRACE"/>
+  <logger name="org.storytotell.easya" level="DEBUG"/>
   <logger name="org.apache.shiro" level="INFO"/>
   
   <root level="debug">

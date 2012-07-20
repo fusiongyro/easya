@@ -37,15 +37,33 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <p:menuitem value="#{courseUI.course.name}" action="pretty:course"/>
   </ui:define>
   
-  <h:form>
-    <p:commandButton 
-      value="Delete #{courseUI.shortCode}" 
-      action="#{courseUI.delete}"
-      ajax="false"
-      rendered="#{courseUI.canDelete}"/>
-  </h:form>
-  
   <blockquote>
     <h:outputText escape="false" value="#{courseUI.course.description}"/>
   </blockquote>
+
+  
+  <h:form>
+    <p:commandButton 
+      value="Delete #{courseUI.shortCode}" 
+      onclick="confirmation.show()"
+      ajax="false"
+      rendered="#{courseUI.canDelete}"
+      type="button"/>
+    
+    <p:confirmDialog 
+      message="Are you sure you want to delete #{courseUI.course.name}?"
+      header="Delete #{courseUI.shortCode}"
+      severity="alert"
+      widgetVar="confirmation">
+      <p:commandButton 
+        value="Delete #{courseUI.shortCode}" 
+        action="#{courseUI.delete}"
+        ajax="false"
+        rendered="#{courseUI.canDelete}"/>
+      <p:commandButton 
+        value="Cancel" 
+        onclick="confirmation.hide()" 
+        type="button" />   
+    </p:confirmDialog>
+  </h:form>
 </ui:composition>

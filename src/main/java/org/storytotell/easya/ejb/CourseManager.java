@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import org.storytotell.easya.annotations.Logged;
 import org.storytotell.easya.entity.Course;
 import org.storytotell.easya.events.CourseCreated;
+import org.storytotell.easya.events.CourseDeleted;
 
 /**
  * Finds specific courses and courses relevent to certain uses and contexts.
@@ -52,6 +53,7 @@ public class CourseManager {
   @PersistenceContext private EntityManager entityManager;
   
   private @Inject Event<CourseCreated> courseCreatedEvent;
+  private @Inject Event<CourseDeleted> courseDeletedEvent;
   
   public Course findById(long id) {
     return entityManager.find(Course.class, id);
@@ -102,5 +104,6 @@ public class CourseManager {
   public void remove(Course course) {
     course = entityManager.merge(course);
     entityManager.remove(course);
+    courseDeletedEvent.fire(new CourseDeleted(course));
   }
 }

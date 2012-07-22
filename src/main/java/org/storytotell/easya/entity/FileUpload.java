@@ -22,30 +22,39 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.easya.ui;
+package org.storytotell.easya.entity;
 
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
-import javax.faces.context.FacesContext;
-import javax.inject.Named;
-import org.storytotell.easya.annotations.Logged;
-import org.storytotell.easya.events.HasFacesMessage;
+import java.io.Serializable;
+import javax.activation.MimeType;
 
 /**
- * Catches some interesting events and sends them to the user.
+ * Represents a file upload for a particular course.
  * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Named
-@RequestScoped
-@Logged
-public class EventBroadcaster {
-  /**
-   * Send something with a FacesMessage on to JSF.
-   * @param obj the object that can be converted
-   */
-  public void broadcast(@Observes HasFacesMessage obj) {
-    FacesContext ctx = FacesContext.getCurrentInstance();
-    ctx.addMessage(null, obj.getFacesMessage());
+public class FileUpload implements Serializable {
+  private static final long serialVersionUID = 1L;
+  
+  private Long     id;
+  private Course   course;
+  private String   filename;
+  private String   type;
+  private byte[]   content;
+
+  public Long     getId()       { return id;       }
+  public Course   getCourse()   { return course;   }
+  public String   getFilename() { return filename; }
+  public String   getType()     { return type; }
+  public byte[]   getContent()  { return content;  }
+
+  public void setId(Long id)                 { this.id       = id;       }
+  public void setFilename(String filename)   { this.filename = filename; }
+  public void setType(String type)           { this.type     = type;     }
+  public void setContent(byte[] content)     { this.content  = content;  }
+
+  public void setCourse(Course course) {
+    this.course = course;
+    if (course != null && !course.getUploads().contains(this))
+      course.addFileUpload(this);
   }
 }

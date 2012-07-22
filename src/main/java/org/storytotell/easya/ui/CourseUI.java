@@ -26,20 +26,23 @@ package org.storytotell.easya.ui;
 
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.storytotell.easya.annotations.Logged;
 import org.storytotell.easya.annotations.LoggedIn;
 import org.storytotell.easya.ejb.CourseManager;
 import org.storytotell.easya.entity.Course;
+import org.storytotell.easya.entity.FileUpload;
 import org.storytotell.easya.entity.User;
-import org.storytotell.easya.events.CourseCreated;
 
 /**
  * @author Daniel Lyons <fusion@storytotell.org>
@@ -62,7 +65,7 @@ public class CourseUI {
   public String getShortCode() { return shortCode; }
   
   public void setShortCode(String shortCode) { this.shortCode = shortCode; }
-
+  
   public void setName(String name) { 
     course.setName(name); 
   }
@@ -97,5 +100,15 @@ public class CourseUI {
   public void loadFromShortCode() {
     if (shortCode != null)
       course = courseManager.findByShortCode(shortCode);
+  }
+  
+  public void uploadReceived(FileUploadEvent evt) {
+    log.info("Upload received");
+    FileUpload upload = new FileUpload();
+    upload.setFilename(evt.getFile().getFileName());
+    upload.setType(evt.getFile().getContentType());
+    upload.setContent(evt.getFile().getContents());
+    courseManager.uploadFile(course, upload);
+    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Upload received.", "The file " + upload.getFilename() + " was successfully uploaded."));
   }
 }

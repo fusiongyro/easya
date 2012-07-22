@@ -36,7 +36,7 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           nullable       = "false" />
       </column>
       <column name="filename" type="varchar"><constraints nullable="false"/></column>
-      <column name="mimetype" type="varchar"><constraints nullable="false"/></column>
+      <column name="type"     type="varchar"><constraints nullable="false"/></column>
       <column name="content"  type="bytea"/>
     </createTable>
   </changeSet>

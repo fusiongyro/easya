@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.storytotell.easya.annotations.Logged;
 import org.storytotell.easya.entity.Course;
+import org.storytotell.easya.entity.FileUpload;
 import org.storytotell.easya.events.CourseCreated;
 import org.storytotell.easya.events.CourseDeleted;
 
@@ -105,5 +106,10 @@ public class CourseManager {
     course = entityManager.merge(course);
     entityManager.remove(course);
     courseDeletedEvent.fire(new CourseDeleted(course));
+  }
+
+  public void uploadFile(Course course, FileUpload upload) {
+    upload.setCourse(course);
+    entityManager.persist(upload);
   }
 }

@@ -39,6 +39,7 @@ import org.storytotell.easya.entity.Course;
 import org.storytotell.easya.entity.FileUpload;
 import org.storytotell.easya.events.CourseCreated;
 import org.storytotell.easya.events.CourseDeleted;
+import org.storytotell.easya.events.FileUploaded;
 
 /**
  * Finds specific courses and courses relevent to certain uses and contexts.
@@ -55,6 +56,7 @@ public class CourseManager {
   
   private @Inject Event<CourseCreated> courseCreatedEvent;
   private @Inject Event<CourseDeleted> courseDeletedEvent;
+  private @Inject Event<FileUploaded>  fileUploadedEvent;
   
   public Course findById(long id) {
     return entityManager.find(Course.class, id);
@@ -109,7 +111,8 @@ public class CourseManager {
   }
 
   public void uploadFile(Course course, FileUpload upload) {
-    upload.setCourse(course);
-    entityManager.persist(upload);
+    course.addFileUpload(upload);
+    entityManager.merge(course);
+    fileUploadedEvent.fire(new FileUploaded(upload));
   }
 }

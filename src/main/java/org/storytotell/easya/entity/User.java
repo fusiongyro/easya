@@ -76,6 +76,7 @@ public class User implements Serializable {
       log.debug("Adding permission to edit and delete {} to authz for {}", c, username);
       authz.addStringPermission("course:edit:" + c.getId());
       authz.addStringPermission("course:delete:" + c.getId());
+      authz.addStringPermission("course:uploadFile:" + c.getId());
     }
   }
 }

@@ -16,7 +16,7 @@
       <many-to-one name="owner">
         <join-column name="owner"/>
       </many-to-one>
-      <one-to-many name="uploads" mapped-by="course"/>
+      <one-to-many name="uploads" mapped-by="course" orphan-removal="true"/>
     </attributes>
   </entity>
   

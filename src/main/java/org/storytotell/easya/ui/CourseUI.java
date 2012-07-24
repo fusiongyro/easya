@@ -24,6 +24,8 @@
  */
 package org.storytotell.easya.ui;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -34,7 +36,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.storytotell.easya.annotations.Logged;
@@ -86,6 +87,12 @@ public class CourseUI {
     return permitted;
   }
   
+  public boolean getCanUploadFiles() {
+    boolean permitted = SecurityUtils.getSubject().isPermitted("course:uploadFile:" + course.getId());
+    log.debug("determining that the current subject can{} upload files to course {}", permitted ? "" : "NOT", course.getName());
+    return permitted;
+  }
+  
   public String delete() {
     // ensure this user can delete this course
     SecurityUtils.getSubject().checkPermission("course:delete:" + course.getId());
@@ -103,12 +110,28 @@ public class CourseUI {
   }
   
   public void uploadReceived(FileUploadEvent evt) {
+    // ensure this user can delete this course
+    SecurityUtils.getSubject().checkPermission("course:uploadFile:" + course.getId());
     log.info("Upload received");
     FileUpload upload = new FileUpload();
     upload.setFilename(evt.getFile().getFileName());
     upload.setType(evt.getFile().getContentType());
     upload.setContent(evt.getFile().getContents());
     courseManager.uploadFile(course, upload);
-    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Upload received.", "The file " + upload.getFilename() + " was successfully uploaded."));
+  }
+  
+  private List<AttachmentUI> attachments = null;
+  
+  private void makeAttachments() {
+    if (course != null && attachments == null) {
+      attachments = new ArrayList<AttachmentUI>();
+      for (FileUpload upload : course.getUploads())
+        attachments.add(new AttachmentUI(upload));
+    }
+  }
+  
+  public List<AttachmentUI> getAttachments() {
+    makeAttachments();
+    return attachments;
   }
 }

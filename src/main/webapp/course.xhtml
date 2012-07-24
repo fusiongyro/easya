@@ -42,8 +42,24 @@ OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </blockquote>
 
   <h:form>
-    <p:fileUpload auto="true" fileUploadListener="#{courseUI.uploadReceived}"/>
-    <p:commandButton ajax="false" value="Submit"/>
+    <ol>
+      <ui:repeat id="downloads" var="at" value="#{courseUI.attachments}" varStatus="stat">
+        <li>
+            <p:commandLink value="Download #{at.filename}" ajax="false">
+              <f:param name="shortCode" value="#{courseUI.shortCode}"/>
+              <p:fileDownload value="#{courseUI.attachments[stat.index].file}"/>
+            </p:commandLink>
+        </li>
+      </ui:repeat>
+    </ol>
+  
+    <p:fileUpload 
+      auto="true" 
+      fileUploadListener="#{courseUI.uploadReceived}" 
+      rendered="#{courseUI.canUploadFiles}"
+      update="@form"/>
+    
+    <p:growl globalOnly="true" showDetail="true" showSummary="true"/>
   </h:form>
   
   <h:form>

@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui"
+  xmlns:cc="http://java.sun.com/jsf/composite"
+  xmlns:f="http://java.sun.com/jsf/core">
+  <head>
+    <title>Facelet Title</title>
+  </head>
+  <body>
+    <cc:interface/>
+    <cc:implementation>
+  <h:form>
+      <div class="formField">
+        <p:outputLabel value="Username" for="username"/><br/>
+        <p:inputText 
+          id="username" 
+          value="#{registrationUI.username}"
+          validator="#{registrationUI.validateUsername}">
+          <p:ajax update="msgUsername" event="valueChange"/>
+        </p:inputText>
+        <p:message for="username" id="msgUsername"/>
+      </div>
+
+      <div class="formField">
+        <p:outputLabel value="Email" for="email"/><br/>
+        <p:inputText id="email" value="#{registrationUI.email}">
+          <p:ajax update="msgEmail" event="valueChange"/>
+        </p:inputText>
+        <p:message for="email" id="msgEmail"/>
+      </div>
+
+      <div class="formField">
+        <p:outputLabel value="Password" for="password"/><br/>
+        <p:password id="password" value="#{registrationUI.password}" match="passwordConfirmation">
+          <p:ajax update="msgPassword" event="valueChange"/>
+        </p:password>
+        <p:message for="password" id="msgPassword"/>
+      </div>
+
+      <div class="formField">
+        <p:outputLabel value="Password (confirmation)" for="passwordConfirmation"/><br/>
+        <p:password id="passwordConfirmation" value="#{registrationUI.passwordConfirmation}">
+          <p:ajax update="msgPasswordConfirmation,msgPassword" event="valueChange"/>
+        </p:password>
+        <p:message for="passwordConfirmation" id="msgPasswordConfirmation"/>
+      </div>
+
+      <div class="formField">
+        <p:outputLabel value="Account Type" for="accountType"/>
+        <p:selectOneRadio id="accountType" value="#{registrationUI.accountType}">
+          <f:selectItem itemLabel="Student" itemValue="student"/>
+          <f:selectItem itemLabel="Teacher" itemValue="teacher"/>
+          <f:selectItem itemLabel="Grader"  itemValue="grader"/>
+        </p:selectOneRadio>
+        <p:message for="accountType"/>
+      </div>
+
+      <div class="formField">
+        <p:commandButton value="Register" action="#{registrationUI.register}" update="@all"/>
+      </div>
+  </h:form>
+    </cc:implementation>
+  </body>
+</html>
+

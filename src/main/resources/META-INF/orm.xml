@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings 
+  xmlns="http://java.sun.com/xml/ns/persistence/orm" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd" version="2.0">
+
+  <package>org.storytotell.easya.entity</package>
+  
+  <entity class="Course">
+    <table name="courses"/>
+    <attributes>
+      <id name="id">
+        <generated-value strategy="IDENTITY"/>
+      </id>
+      <basic name="name"><column nullable="false" unique="true"/></basic>
+      <basic name="description"/>
+      <basic name="shortCode"><column name="short_code" nullable="false" unique="true"/></basic>
+      <many-to-one name="owner">
+        <join-column name="owner"/>
+      </many-to-one>
+    </attributes>
+  </entity>
+  
+  <entity class="User">
+    <table name="users"/>
+    <attributes>
+      <id name="username"/>
+      <basic name="password"/>
+      <basic name="emailAddress"><column name="email" nullable="false" unique="true"/></basic>
+      <one-to-many name="courses" mapped-by="owner"/>
+    </attributes>
+  </entity>
+</entity-mappings>

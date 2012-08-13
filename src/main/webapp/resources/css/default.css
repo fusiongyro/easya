@@ -1,0 +1,21 @@
+h1, h2, h3, h4, h5, h6 { font-family: 'Simonetta', cursive; }
+h1 { font-size: 48pt; }
+h2 { font-size: 36pt; }
+
+body {
+  font: 'Pontano Sans', sans-serif;
+  margin: 0 auto;
+  width: 48em;
+  text-rendering: optimizeLegibility;
+  -moz-font-smoothing:antialiased;
+  -webkit-font-smoothing:antialiased;
+  font-smoothing:antialiased;
+}
+
+.formField .ui-message-error {
+  margin: 4pt 0 12pt 0;
+}
+
+.formField {
+  margin-bottom: 12pt;
+}

@@ -22,34 +22,31 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.easya.validations.annotations;
+package org.storytotell.easya.events;
 
-import static java.lang.annotation.ElementType.*;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import javax.validation.Constraint;
-import javax.validation.Payload;
-import javax.validation.ReportAsSingleViolation;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.faces.application.FacesMessage;
+import org.storytotell.easya.entity.User;
 
 /**
- * Validates the necessary requirements of a short code, which essentially are
- * that it looks good in a URL.
+ * Broadcast when someone logs out.
  * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Target({METHOD, FIELD, ANNOTATION_TYPE})
-@Retention(RUNTIME)
-@NotNull(message="must not be empty")
-@Size(min=3, max=12)
-@Pattern(regexp="[A-Za-z0-9-]*", message="{org.storytotell.easya.constraints.shortCode}")
-@Constraint(validatedBy={})
-@ReportAsSingleViolation
-public @interface ShortCode {
-  String message() default "{org.storytotell.easya.constraints.shortCode}";
-  Class<?>[] groups() default {};
-  Class<? extends Payload>[] payload() default {};
+public class Logout implements HasFacesMessage {
+  private User user;
+
+  public User getUser() {
+    return user;
+  }
+
+  public Logout(User user) {
+    this.user = user;
+  }
+
+  @Override
+  public FacesMessage getFacesMessage() {
+    String summary = "You are now logged out";
+    String detail = "See you later, " + user.getUsername() + "!";
+    return new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+  }
 }

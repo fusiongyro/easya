@@ -22,52 +22,29 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.easya.ejb;
+package org.storytotell.easya.events;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.storytotell.easya.annotations.Logged;
-import org.storytotell.easya.entity.User;
-import org.storytotell.easya.events.AccountRegistered;
+import javax.faces.application.FacesMessage;
+import org.storytotell.easya.entity.Course;
 
 /**
- * Handles User lookup and registration.
- * 
+ *
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Stateless
-@LocalBean
-@Logged
-@Named("AccountManager")
-public class AccountManager {
-  private static final Logger log = LoggerFactory.getLogger(AccountManager.class);
-  private @PersistenceContext EntityManager em;
+public class CourseDeleted implements HasFacesMessage {
+  private Course course;
 
-  private @Inject Event<AccountRegistered> accountRegistered;
+  public CourseDeleted(Course course) {
+    this.course = course;
+  }
 
-  public User findByUsername(String username) {
-    return em.find(User.class, username);
+  public Course getCourse() {
+    return course;
   }
-  
-  public boolean isUsernameTaken(String username) {
-    String query = "SELECT COUNT(u) FROM User u WHERE u.username = :username";
-    
-    long count = (Long)em.createQuery(query)
-            .setParameter("username", username)
-            .getSingleResult();
-    
-    return count == 1;
-  }
-  
-  public void register(User user) {
-    em.persist(user);
-    accountRegistered.fire(new AccountRegistered(user));
+
+  @Override
+  public FacesMessage getFacesMessage() {
+    String desc = "The course named " + course.getName() + " has been deleted.";
+    return new FacesMessage(FacesMessage.SEVERITY_INFO, "Course deleted", desc);
   }
 }

@@ -10,16 +10,16 @@
   <body>
     <cc:interface>
       <cc:attribute name="course" required="true"/>
-      <cc:attribute name="saveAction" method-signature="java.lang.String f()" required="true"/>
+      <cc:attribute name="saveAction" method-signature="java.lang.String action()" required="true"/>
     </cc:interface>
     <cc:implementation>
       <h:form>
         <p:fieldset legend="Create Course">
-
+          <p:focus for="name"/>
           <div class="formField">
             <p:outputLabel for="name" value="Name"/><br/>
-            <p:inputText id="name" value="#{cc.attrs.course.name}" required="true">
-              <f:validateLength minimum="4" maximum="14"/>
+            <p:inputText id="name" value="#{cc.attrs.course.name}" required="true" size="52">
+              <f:validateLength minimum="4"/>
             </p:inputText><br/>
             <p:message for="name"/>
           </div>

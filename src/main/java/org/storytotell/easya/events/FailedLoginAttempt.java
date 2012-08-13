@@ -22,52 +22,30 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.easya.ejb;
+package org.storytotell.easya.events;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.storytotell.easya.annotations.Logged;
-import org.storytotell.easya.entity.User;
-import org.storytotell.easya.events.AccountRegistered;
+import javax.faces.application.FacesMessage;
+import org.apache.shiro.authc.AuthenticationToken;
 
 /**
- * Handles User lookup and registration.
- * 
+ *
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Stateless
-@LocalBean
-@Logged
-@Named("AccountManager")
-public class AccountManager {
-  private static final Logger log = LoggerFactory.getLogger(AccountManager.class);
-  private @PersistenceContext EntityManager em;
+public class FailedLoginAttempt implements HasFacesMessage {
+  private AuthenticationToken attempt;
 
-  private @Inject Event<AccountRegistered> accountRegistered;
+  public FailedLoginAttempt(AuthenticationToken attempt) {
+    this.attempt = attempt;
+  }
 
-  public User findByUsername(String username) {
-    return em.find(User.class, username);
+  public AuthenticationToken getAttempt() {
+    return attempt;
   }
   
-  public boolean isUsernameTaken(String username) {
-    String query = "SELECT COUNT(u) FROM User u WHERE u.username = :username";
-    
-    long count = (Long)em.createQuery(query)
-            .setParameter("username", username)
-            .getSingleResult();
-    
-    return count == 1;
-  }
-  
-  public void register(User user) {
-    em.persist(user);
-    accountRegistered.fire(new AccountRegistered(user));
+  @Override
+  public FacesMessage getFacesMessage() {
+    String summary = "Login failed.";
+    String details = "Please double-check your username and password and try again.";
+    return new FacesMessage(FacesMessage.SEVERITY_WARN, summary, details);
   }
 }

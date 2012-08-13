@@ -1,6 +1,5 @@
 h1, h2, h3, h4, h5, h6 { font-family: 'Simonetta', cursive; }
-h1 { font-size: 48pt; }
-h2 { font-size: 36pt; }
+h2 { margin: 0 1ex; }
 
 body {
   font: 'Pontano Sans', sans-serif;
@@ -18,4 +17,22 @@ body {
 
 .formField {
   margin-bottom: 12pt;
+}
+
+/* UI overloads */
+.ui-toolbar .ui-button-text-only .ui-button-text {
+  line-height: normal;
+  padding: 0.1em 0.4em;
+}
+
+.ui-breadcrumb .ui-icon { margin-top: 5px !important }
+
+.ui-icon-triangle-1-e { padding-right: 2px; }
+
+#titlebar {
+  padding: 20px 1ex;
+}
+
+#titlebar h1, #titlebar h2 {
+  margin: 0;
 }

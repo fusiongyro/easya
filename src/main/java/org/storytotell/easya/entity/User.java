@@ -73,8 +73,10 @@ public class User implements Serializable {
   public void copyPermissionsInto(SimpleAuthorizationInfo authz) {
     // alert that I can edit and delete this course
     for (Course c : getCourses()) {
+      log.debug("Adding permission to edit and delete {} to authz for {}", c, username);
       authz.addStringPermission("course:edit:" + c.getId());
       authz.addStringPermission("course:delete:" + c.getId());
+      authz.addStringPermission("course:uploadFile:" + c.getId());
     }
   }
 }

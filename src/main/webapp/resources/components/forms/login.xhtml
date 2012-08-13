@@ -12,11 +12,14 @@
   <body>
     <cc:interface/>
     <cc:implementation>
-      <h:form>
+      <h:form id="loginForm">
         <p:fieldset>
           <div class="formField">
             <p:outputLabel for="username" value="Username:"/><br/>
-            <p:inputText id="username" value="#{authenticationUI.username}"/>
+            <p:inputText 
+              id="username" 
+              value="#{authenticationUI.username}" 
+              widgetVar="loginUsernameInput"/>
           </div>
 
           <div class="formField">
@@ -27,8 +30,6 @@
           <ui:fragment>&nbsp;</ui:fragment>
           <p:commandButton ajax="false" value="Login" action="#{authenticationUI.authenticate}"/>
         </p:fieldset>
-
-        <p:messages/>
       </h:form>
     </cc:implementation>
   </body>

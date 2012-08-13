@@ -13,7 +13,13 @@
     <h:outputStylesheet library="css" name="default.css"/>
   </h:head>
   <h:body>
+    <h:form><p:growl globalOnly="true" showDetail="true" showSummary="true"/></h:form>
     <links:welcome/>
+    <h:form>
+      <p:breadCrumb>
+        <ui:insert name="breadcrumbs"/>
+      </p:breadCrumb>
+    </h:form>
     <ui:insert/>
   </h:body>
 </html>

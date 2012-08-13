@@ -22,52 +22,25 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.easya.ejb;
+package org.storytotell.easya.annotations;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.storytotell.easya.annotations.Logged;
-import org.storytotell.easya.entity.User;
-import org.storytotell.easya.events.AccountRegistered;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import javax.interceptor.InterceptorBinding;
+
 
 /**
- * Handles User lookup and registration.
+ * Logs invocations of functions automagically. Eliminates need to write FINE 
+ * log statements, and frees us to only log when something interesting really 
+ * does happen (i.e. exceptions, branches).
  * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Stateless
-@LocalBean
-@Logged
-@Named("AccountManager")
-public class AccountManager {
-  private static final Logger log = LoggerFactory.getLogger(AccountManager.class);
-  private @PersistenceContext EntityManager em;
-
-  private @Inject Event<AccountRegistered> accountRegistered;
-
-  public User findByUsername(String username) {
-    return em.find(User.class, username);
-  }
-  
-  public boolean isUsernameTaken(String username) {
-    String query = "SELECT COUNT(u) FROM User u WHERE u.username = :username";
-    
-    long count = (Long)em.createQuery(query)
-            .setParameter("username", username)
-            .getSingleResult();
-    
-    return count == 1;
-  }
-  
-  public void register(User user) {
-    em.persist(user);
-    accountRegistered.fire(new AccountRegistered(user));
-  }
+@InterceptorBinding
+@Target({TYPE, METHOD})
+@Retention(RUNTIME)
+public @interface Logged {
 }

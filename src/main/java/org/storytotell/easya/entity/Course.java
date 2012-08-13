@@ -25,8 +25,9 @@
 package org.storytotell.easya.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.validation.constraints.NotNull;
-import org.storytotell.easya.validations.annotations.ShortCode;
+import org.storytotell.easya.annotations.ShortCode;
 
 /**
  * Represents a particular class on a particular topic taught by a particular
@@ -38,26 +39,36 @@ public class Course implements Serializable {
   private static final long serialVersionUID = 1L;
   private Long id;
   
-  private @NotNull   String name;
-  private            String description;
-  private @ShortCode String shortCode;
-  private            User   owner;
+  private @NotNull   String           name;
+  private            String           description;
+  private @ShortCode String           shortCode;
+  private            User             owner;
+  private            List<FileUpload> uploads;
 
-  public Long   getId()          { return id; }
-  public String getName()        { return name; }
-  public String getDescription() { return description; }
-  public String getShortCode()   { return shortCode; }
-  public User   getOwner()       { return owner; }
+  public Long   getId()                { return id; }
+  public String getName()              { return name; }
+  public String getDescription()       { return description; }
+  public String getShortCode()         { return shortCode; }
+  public User   getOwner()             { return owner; }
+  public List<FileUpload> getUploads() { return uploads; }
   
-  public void setId(Long id)                     { this.id = id; }
-  public void setName(String name)               { this.name = name; }
-  public void setDescription(String description) { this.description = description; }
-  public void setShortCode(String shortCode)     { this.shortCode = shortCode; }
+  public void setId(Long id)                       { this.id = id; }
+  public void setName(String name)                 { this.name = name; }
+  public void setDescription(String description)   { this.description = description; }
+  public void setShortCode(String shortCode)       { this.shortCode = shortCode; }
+  public void setUploads(List<FileUpload> uploads) { this.uploads = uploads; }
+  
   
   public void setOwner(User owner) {
     this.owner = owner;
     if (owner != null && !owner.getCourses().contains(this))
       owner.addCourse(this);
+  }
+  
+  public void addFileUpload(FileUpload upload) {
+    uploads.add(upload);
+    if (upload.getCourse() != this)
+      upload.setCourse(this);
   }
 
   @Override
@@ -81,6 +92,6 @@ public class Course implements Serializable {
 
   @Override
   public String toString() {
-    return "org.storytotell.easya.entity.Course[ id=" + id + " ]";
+    return "org.storytotell.easya.entity.Course[id=" + id + ", shortCode=" + shortCode + "]";
   }
 }

@@ -24,6 +24,7 @@
  */
 package org.storytotell.easya.events;
 
+import javax.faces.application.FacesMessage;
 import org.storytotell.easya.entity.User;
 
 /**
@@ -31,7 +32,7 @@ import org.storytotell.easya.entity.User;
  * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-public class Login {
+public class Login implements HasFacesMessage {
   private User user;
 
   public Login(User user) {
@@ -40,5 +41,12 @@ public class Login {
 
   public User getUser() {
     return user;
+  }
+
+  @Override
+  public FacesMessage getFacesMessage() {
+    String summary = "You are now logged in.";
+    String detail = "Welcome back, " + user.getUsername() + "!";
+    return new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
   }
 }

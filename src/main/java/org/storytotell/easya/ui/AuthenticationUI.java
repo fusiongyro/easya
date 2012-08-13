@@ -26,9 +26,11 @@ package org.storytotell.easya.ui;
 
 import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Event;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
 import org.apache.shiro.SecurityUtils;
@@ -41,6 +43,13 @@ import org.apache.shiro.web.env.IniWebEnvironment;
 import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.storytotell.easya.annotations.Logged;
+import org.storytotell.easya.annotations.LoggedIn;
+import org.storytotell.easya.ejb.AccountManager;
+import org.storytotell.easya.entity.User;
+import org.storytotell.easya.events.FailedLoginAttempt;
+import org.storytotell.easya.events.Login;
+import org.storytotell.easya.events.Logout;
 
 /**
  * Managed bean to handle login and logout.
@@ -48,6 +57,7 @@ import org.slf4j.LoggerFactory;
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @RequestScoped
+@Logged
 @Named("authenticationUI")
 public class AuthenticationUI implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -55,27 +65,41 @@ public class AuthenticationUI implements Serializable {
   private static final Logger log = LoggerFactory.getLogger(AuthenticationUI.class);
   private String username, password;
 
-  public @Produces IniWebEnvironment getWebEnvironment() {
+  @Inject private AccountManager            accountManager;
+  @Inject private Event<Login>              loginEvent;
+  @Inject private Event<Logout>             logoutEvent;
+  @Inject private Event<FailedLoginAttempt> failedLoginEvent;
+  
+  private IniWebEnvironment getWebEnvironment() {
     ServletContext ctx = (ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext();
     return (IniWebEnvironment)WebUtils.getRequiredWebEnvironment(ctx);
   }
   
-  public @Produces PasswordService getPasswordService() {
+  private PasswordService getPasswordService() {
     return getWebEnvironment().getObject("passwordService", HashingPasswordService.class);
   }
   
-  public @Produces Subject getCurrentUser() { 
-    return SecurityUtils.getSubject();
+  public @Produces @LoggedIn User getLoggedInUser() {
+    Subject subject = SecurityUtils.getSubject();
+    
+    if (!subject.isAuthenticated())
+      return null;
+    
+    return accountManager.findByUsername((String)subject.getPrincipal());
   }
-
+  
   /**
    * Attempt to log in with the currently-defined properties.
    */
   public void authenticate() {
     try {
-      getCurrentUser().login(getAuthenticationToken());
+      SecurityUtils.getSubject().login(getAuthenticationToken());
+      
+      log.info("Successful login by {}", username);
+      loginEvent.fire(new Login(getLoggedInUser()));
     } catch (Exception e) {
-      FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Login failed.", "Login failed."));
+      log.info("Failed login by {}", username);
+      failedLoginEvent.fire(new FailedLoginAttempt(getAuthenticationToken()));
     }
   }
   
@@ -95,7 +119,9 @@ public class AuthenticationUI implements Serializable {
    * Close the current session for the currently logged-in user.
    */
   public void logout() {
-    getCurrentUser().logout();
+    User u = getLoggedInUser();
+    SecurityUtils.getSubject().logout();
+    logoutEvent.fire(new Logout(u));
   }
   
   public String getUsername() { return username; }
@@ -113,5 +139,9 @@ public class AuthenticationUI implements Serializable {
    */
   private AuthenticationToken getAuthenticationToken() {
     return new UsernamePasswordToken(username, password);
+  }
+
+  public String encryptPassword(String password) {
+    return getPasswordService().encryptPassword(password);
   }
 }

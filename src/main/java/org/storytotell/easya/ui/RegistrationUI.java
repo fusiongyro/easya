@@ -33,7 +33,7 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
-import org.apache.shiro.authc.credential.PasswordService;
+import org.storytotell.easya.annotations.Logged;
 import org.storytotell.easya.ejb.AccountManager;
 import org.storytotell.easya.entity.User;
 
@@ -43,6 +43,7 @@ import org.storytotell.easya.entity.User;
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @Named("registrationUI")
+@Logged
 @RequestScoped
 public class RegistrationUI implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -50,29 +51,25 @@ public class RegistrationUI implements Serializable {
   private @NotNull String username;
   private @NotNull String email;
   private @NotNull String password;
-  private @NotNull String passwordConfirmation;
   private String accountType;
 
   public String getUsername()             { return username; }
   public String getEmail()                { return email; }
   public String getPassword()             { return password; }
-  public String getPasswordConfirmation() { return passwordConfirmation; }
   public String getAccountType()          { return accountType; }
 
   public void setUsername(String username)                 { this.username = username; }
   public void setEmail(String email)                       { this.email = email; }
   public void setPassword(String password)                 { this.password = password; }
-  public void setPasswordConfirmation(String confirmation) { this.passwordConfirmation = confirmation; }
   public void setAccountType(String accountType)           { this.accountType = accountType; }
   
   private @Inject AuthenticationUI authenticationUI;
-  private @Inject PasswordService  passwordService;
   private @Inject AccountManager accountManager;
   
   public String register() {
     User user = new User();
 
-    String encryptedPassword = passwordService.encryptPassword(password);
+    String encryptedPassword = authenticationUI.encryptPassword(password);
 
     user.setUsername(username);
     

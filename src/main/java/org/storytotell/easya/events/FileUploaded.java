@@ -22,38 +22,31 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.easya.ui;
+package org.storytotell.easya.events;
 
-import java.io.Serializable;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-import javax.inject.Named;
-import org.apache.shiro.subject.Subject;
-import org.storytotell.easya.annotations.LoggedIn;
-import org.storytotell.easya.ejb.AccountManager;
-import org.storytotell.easya.entity.User;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import org.storytotell.easya.entity.FileUpload;
 
 /**
- * Represent the currently logged-in user. In contrast to the user whose page
- * we may or may not be looking at.
- * 
+ *
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@RequestScoped
-@Named("loggedInUserUI")
-public class LoggedInUserUI implements Serializable {
-  @Produces @LoggedIn private User currentUser = null;
-  @Inject private AccountManager accountManager;
-  @Inject private Subject currentSubject;
-  
-  @PostConstruct
-  public void lookupUser() {
-    if (currentSubject.isAuthenticated())
-      currentUser = accountManager.findByUsername(currentSubject.getPrincipal().toString());
+public class FileUploaded implements HasFacesMessage {
+  private FileUpload upload;
+
+  public FileUploaded(FileUpload fileUpload) {
+    this.upload = fileUpload;
   }
 
-  public User getCurrentUser() { return currentUser; }
+  public FileUpload getFileUpload() {
+    return upload;
+  }
+
+  @Override
+  public FacesMessage getFacesMessage() {
+    String summary = "Upload received.";
+    String detail = "The file " + upload.getFilename() + " was successfully uploaded.";
+    return new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+  }
 }

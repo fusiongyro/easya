@@ -22,52 +22,19 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.easya.ejb;
+package org.storytotell.easya.entity;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.storytotell.easya.annotations.Logged;
-import org.storytotell.easya.entity.User;
-import org.storytotell.easya.events.AccountRegistered;
+import java.util.Date;
 
 /**
- * Handles User lookup and registration.
+ * Represents an "event" of some kind that gets stored in the timeline for a 
+ * particular user or course.
  * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Stateless
-@LocalBean
-@Logged
-@Named("AccountManager")
-public class AccountManager {
-  private static final Logger log = LoggerFactory.getLogger(AccountManager.class);
-  private @PersistenceContext EntityManager em;
+public class TimelineEvent {
+  private Date moment;
 
-  private @Inject Event<AccountRegistered> accountRegistered;
-
-  public User findByUsername(String username) {
-    return em.find(User.class, username);
-  }
-  
-  public boolean isUsernameTaken(String username) {
-    String query = "SELECT COUNT(u) FROM User u WHERE u.username = :username";
-    
-    long count = (Long)em.createQuery(query)
-            .setParameter("username", username)
-            .getSingleResult();
-    
-    return count == 1;
-  }
-  
-  public void register(User user) {
-    em.persist(user);
-    accountRegistered.fire(new AccountRegistered(user));
-  }
+  public Date getMoment()            { return moment;        }
+  public void setMoment(Date moment) { this.moment = moment; }
 }

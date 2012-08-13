@@ -24,26 +24,32 @@
  */
 package org.storytotell.easya.ui;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.primefaces.event.FileUploadEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.storytotell.easya.annotations.Logged;
 import org.storytotell.easya.annotations.LoggedIn;
 import org.storytotell.easya.ejb.CourseManager;
 import org.storytotell.easya.entity.Course;
+import org.storytotell.easya.entity.FileUpload;
 import org.storytotell.easya.entity.User;
-import org.storytotell.easya.events.CourseCreated;
 
 /**
  * @author Daniel Lyons <fusion@storytotell.org>
  */
 @Named("courseUI")
+@Logged
 @RequestScoped
 public class CourseUI {
   private static final Logger log = LoggerFactory.getLogger(CourseUI.class.getName());
@@ -55,18 +61,20 @@ public class CourseUI {
   private String shortCode;
   private Course newCourse = new Course();
 
-  public Course getCourse() {
-    return course;
-  }
+  public Course getCourse()    { return course; }
+  public Course getNewCourse() { return newCourse; }
+  public String getShortCode() { return shortCode; }
   
-  public Course getNewCourse() {
-    return newCourse;
-  }
+  public void setShortCode(String shortCode) { this.shortCode = shortCode; }
   
+  public void setName(String name) { 
+    course.setName(name); 
+  }
+
   @RequiresAuthentication
   @RequiresPermissions(value="course:create")
   public String saveNew() {
-    log.debug("saving new course {}", course.getName());
+    log.info("Creating new course with name \"{}\"", newCourse.getName());
     newCourse.setOwner(user);
     courseManager.save(newCourse);
     shortCode = newCourse.getShortCode();
@@ -79,34 +87,51 @@ public class CourseUI {
     return permitted;
   }
   
+  public boolean getCanUploadFiles() {
+    boolean permitted = SecurityUtils.getSubject().isPermitted("course:uploadFile:" + course.getId());
+    log.debug("determining that the current subject can{} upload files to course {}", permitted ? "" : "NOT", course.getName());
+    return permitted;
+  }
+  
   public String delete() {
-    log.debug("delete course called");
     // ensure this user can delete this course
     SecurityUtils.getSubject().checkPermission("course:delete:" + course.getId());
-    log.debug("removing course");
+    log.debug("Deleting course {}", course);
     user.removeCourse(course);
     courseManager.remove(course);
-    log.debug("going home");
     return "pretty:home";
   }
   
   public void save() { courseManager.update(course); }
-
-  public String getShortCode() { return shortCode; }
-  public void setShortCode(String shortCode) 
-  {
-    this.shortCode = shortCode; 
-  }
   
-  public void setName(String name) { course.setName(name); }
-  
-  public void logCourseCreated(@Observes CourseCreated created) {
-    log.debug("just saw a course get created with name {0}", created.getNewCourse().getName());
-  }
-
   public void loadFromShortCode() {
-    log.debug("loading from short code {}", shortCode);
     if (shortCode != null)
       course = courseManager.findByShortCode(shortCode);
+  }
+  
+  public void uploadReceived(FileUploadEvent evt) {
+    // ensure this user can delete this course
+    SecurityUtils.getSubject().checkPermission("course:uploadFile:" + course.getId());
+    log.info("Upload received");
+    FileUpload upload = new FileUpload();
+    upload.setFilename(evt.getFile().getFileName());
+    upload.setType(evt.getFile().getContentType());
+    upload.setContent(evt.getFile().getContents());
+    courseManager.uploadFile(course, upload);
+  }
+  
+  private List<AttachmentUI> attachments = null;
+  
+  private void makeAttachments() {
+    if (course != null && attachments == null) {
+      attachments = new ArrayList<AttachmentUI>();
+      for (FileUpload upload : course.getUploads())
+        attachments.add(new AttachmentUI(upload));
+    }
+  }
+  
+  public List<AttachmentUI> getAttachments() {
+    makeAttachments();
+    return attachments;
   }
 }

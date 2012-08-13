@@ -4,4 +4,5 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
   <include file="src/main/resources/org/storytotell/easya/liquibase/install/user.xml"/>
   <include file="src/main/resources/org/storytotell/easya/liquibase/install/course.xml"/>
+  <include file="src/main/resources/org/storytotell/easya/liquibase/install/fileupload.xml"/>
 </databaseChangeLog>

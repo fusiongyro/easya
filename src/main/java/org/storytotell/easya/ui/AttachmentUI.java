@@ -22,52 +22,74 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.easya.ejb;
+package org.storytotell.easya.ui;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.storytotell.easya.annotations.Logged;
-import org.storytotell.easya.entity.User;
-import org.storytotell.easya.events.AccountRegistered;
+import java.io.ByteArrayInputStream;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.storytotell.easya.entity.FileUpload;
+
 
 /**
- * Handles User lookup and registration.
- * 
+ *
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Stateless
-@LocalBean
-@Logged
-@Named("AccountManager")
-public class AccountManager {
-  private static final Logger log = LoggerFactory.getLogger(AccountManager.class);
-  private @PersistenceContext EntityManager em;
+public class AttachmentUI {
+  private FileUpload upload;
 
-  private @Inject Event<AccountRegistered> accountRegistered;
+  public AttachmentUI() {
+  }
 
-  public User findByUsername(String username) {
-    return em.find(User.class, username);
+  public AttachmentUI(FileUpload upload) {
+    this();
+    setUpload(upload);
+  }
+
+  public FileUpload getUpload() {
+    return upload;
+  }
+
+  public void setUpload(FileUpload upload) {
+    this.upload = upload;
   }
   
-  public boolean isUsernameTaken(String username) {
-    String query = "SELECT COUNT(u) FROM User u WHERE u.username = :username";
-    
-    long count = (Long)em.createQuery(query)
-            .setParameter("username", username)
-            .getSingleResult();
-    
-    return count == 1;
+  public void setType(String type) {
+    upload.setType(type);
+  }
+
+  public void setFilename(String filename) {
+    upload.setFilename(filename);
+  }
+
+  public void setContent(byte[] content) {
+    upload.setContent(content);
+  }
+
+  public String getType() {
+    return upload.getType();
+  }
+
+  public String getFilename() {
+    return upload.getFilename();
+  }
+
+  public byte[] getContent() {
+    return upload.getContent();
   }
   
-  public void register(User user) {
-    em.persist(user);
-    accountRegistered.fire(new AccountRegistered(user));
+  public StreamedContent getFile() {
+    ByteArrayInputStream stream = new ByteArrayInputStream(upload.getContent());
+    return new DefaultStreamedContent(
+            stream, 
+            upload.getType(), 
+            upload.getFilename());
+  }
+
+  public String getMyFilename() { return upload.getFilename(); }
+  public void setMyFilename(String fn) { upload.setFilename(fn); }
+  
+  @Override
+  public String toString() {
+    return upload.getFilename();
   }
 }

@@ -22,52 +22,30 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.easya.ejb;
+package org.storytotell.easya.ui;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Observes;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.storytotell.easya.annotations.Logged;
-import org.storytotell.easya.entity.User;
-import org.storytotell.easya.events.AccountRegistered;
+import org.storytotell.easya.events.HasFacesMessage;
 
 /**
- * Handles User lookup and registration.
+ * Catches some interesting events and sends them to the user.
  * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Stateless
-@LocalBean
+@Named
+@RequestScoped
 @Logged
-@Named("AccountManager")
-public class AccountManager {
-  private static final Logger log = LoggerFactory.getLogger(AccountManager.class);
-  private @PersistenceContext EntityManager em;
-
-  private @Inject Event<AccountRegistered> accountRegistered;
-
-  public User findByUsername(String username) {
-    return em.find(User.class, username);
-  }
-  
-  public boolean isUsernameTaken(String username) {
-    String query = "SELECT COUNT(u) FROM User u WHERE u.username = :username";
-    
-    long count = (Long)em.createQuery(query)
-            .setParameter("username", username)
-            .getSingleResult();
-    
-    return count == 1;
-  }
-  
-  public void register(User user) {
-    em.persist(user);
-    accountRegistered.fire(new AccountRegistered(user));
+public class EventBroadcaster {
+  /**
+   * Send something with a FacesMessage on to JSF.
+   * @param obj the object that can be converted
+   */
+  public void broadcast(@Observes HasFacesMessage obj) {
+    FacesContext ctx = FacesContext.getCurrentInstance();
+    ctx.addMessage(null, obj.getFacesMessage());
   }
 }

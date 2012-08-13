@@ -9,15 +9,14 @@
   <entity class="Course">
     <table name="courses"/>
     <attributes>
-      <id name="id">
-        <generated-value strategy="IDENTITY"/>
-      </id>
+      <id name="id"><generated-value strategy="IDENTITY"/></id>
       <basic name="name"><column nullable="false" unique="true"/></basic>
       <basic name="description"/>
       <basic name="shortCode"><column name="short_code" nullable="false" unique="true"/></basic>
       <many-to-one name="owner">
         <join-column name="owner"/>
       </many-to-one>
+      <one-to-many name="uploads" mapped-by="course" orphan-removal="true"/>
     </attributes>
   </entity>
   
@@ -28,6 +27,19 @@
       <basic name="password"/>
       <basic name="emailAddress"><column name="email" nullable="false" unique="true"/></basic>
       <one-to-many name="courses" mapped-by="owner"/>
+    </attributes>
+  </entity>
+  
+  <entity class="FileUpload">
+    <table name="file_uploads"/>
+    <attributes>
+      <id name="id"><generated-value strategy="IDENTITY"/></id>
+      <basic name="filename"/>
+      <basic name="content"/>
+      <basic name="type"/>
+      <many-to-one name="course">
+        <join-column name="course_id"/>
+      </many-to-one>
     </attributes>
   </entity>
 </entity-mappings>

@@ -22,52 +22,39 @@
  * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * 
  */
-package org.storytotell.easya.ejb;
+package org.storytotell.easya.entity;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.storytotell.easya.annotations.Logged;
-import org.storytotell.easya.entity.User;
-import org.storytotell.easya.events.AccountRegistered;
+import java.io.Serializable;
+import javax.activation.MimeType;
 
 /**
- * Handles User lookup and registration.
+ * Represents a file upload for a particular course.
  * 
  * @author Daniel Lyons <fusion@storytotell.org>
  */
-@Stateless
-@LocalBean
-@Logged
-@Named("AccountManager")
-public class AccountManager {
-  private static final Logger log = LoggerFactory.getLogger(AccountManager.class);
-  private @PersistenceContext EntityManager em;
-
-  private @Inject Event<AccountRegistered> accountRegistered;
-
-  public User findByUsername(String username) {
-    return em.find(User.class, username);
-  }
+public class FileUpload implements Serializable {
+  private static final long serialVersionUID = 1L;
   
-  public boolean isUsernameTaken(String username) {
-    String query = "SELECT COUNT(u) FROM User u WHERE u.username = :username";
-    
-    long count = (Long)em.createQuery(query)
-            .setParameter("username", username)
-            .getSingleResult();
-    
-    return count == 1;
-  }
-  
-  public void register(User user) {
-    em.persist(user);
-    accountRegistered.fire(new AccountRegistered(user));
+  private Long     id;
+  private Course   course;
+  private String   filename;
+  private String   type;
+  private byte[]   content;
+
+  public Long     getId()       { return id;       }
+  public Course   getCourse()   { return course;   }
+  public String   getFilename() { return filename; }
+  public String   getType()     { return type; }
+  public byte[]   getContent()  { return content;  }
+
+  public void setId(Long id)                 { this.id       = id;       }
+  public void setFilename(String filename)   { this.filename = filename; }
+  public void setType(String type)           { this.type     = type;     }
+  public void setContent(byte[] content)     { this.content  = content;  }
+
+  public void setCourse(Course course) {
+    this.course = course;
+    if (course != null && !course.getUploads().contains(this))
+      course.addFileUpload(this);
   }
 }
